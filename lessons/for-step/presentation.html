@@ -169,6 +169,32 @@ button.cell.missed{background:#FBFDF8;color:#2F7D4F;border:3px dashed #2F7D4F}
 .qbar{display:flex;flex-direction:row-reverse;gap:16px;margin-top:8px}
 .qbar .bbtn{font-size:26px;padding:8px 26px}
 
+
+
+
+.sumrow{flex:1;align-items:stretch}
+.sumcard{gap:18px}
+.sumnum{font-family:'Rubik',Arial,sans-serif;font-size:72px;font-weight:800;line-height:1;color:#2F7D4F}
+.sumcard h3{font-size:40px}
+.sumcard .code.small{font-size:30px}
+.sumex{display:flex;flex-direction:column;align-items:flex-end;gap:6px;margin-top:auto}
+.seqs{font-family:'JetBrains Mono',monospace;font-size:24px;color:#4A5A52;direction:ltr;unicode-bidi:isolate}
+
+
+.sumlist{display:flex;flex-direction:column;gap:24px;margin-top:12px}
+.sumline{display:flex;flex-direction:row-reverse;align-items:center;gap:28px;background:#FBFDF8;border:2px solid #D7E2D1;border-radius:18px;padding:22px 32px}
+.sumline .sumnum{font-size:56px;width:48px;text-align:center}
+.sumline h3{flex:none;width:720px;font-size:40px;text-align:right}
+.sumeg{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.sumeg .code.small{font-size:28px;align-self:flex-start}
+.sumeg .seqs{font-size:22px;text-align:left}
+
+
+.fbrow{display:flex;flex-direction:row-reverse;align-items:center;gap:96px;flex:1}
+.fbtext{flex:1;display:flex;flex-direction:column;gap:32px}
+.fbqr{background:#FFFFFF;border:3px solid #D7E2D1;border-radius:28px;padding:28px;box-shadow:0 12px 40px #143B2E22}
+.fbqr img{display:block;width:560px;height:560px}
+
 #ui{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:8px;align-items:center;background:#143B2Ecc;color:#F3F6EF;padding:6px 10px;border-radius:30px;font:600 15px 'Heebo',Arial,sans-serif;direction:rtl;opacity:.25;transition:opacity .2s;z-index:10}
 #ui:hover,#ui:focus-within{opacity:1}
 #ui button{font:inherit;color:inherit;background:transparent;border:0;cursor:pointer;padding:6px 10px;border-radius:20px}
@@ -411,22 +437,27 @@ button.cell.missed{background:#FBFDF8;color:#2F7D4F;border:3px dashed #2F7D4F}
 </section>
 
 <section class="slide" id="exit">
-<p class="eyebrow">‫סיכום · כרטיס יציאה‬</p>
-<p class="quote">‫„כדי לדעת כמה פעמים לולאה תרוץ, אני…“‬</p>
-<div class="spacer"></div>
-<div class="row">
-<p class="tag">‫כיוון‬</p><p class="tag">‫השמה‬</p><p class="tag">‫ערך אחרון‬</p>
+<p class="eyebrow">‫סיכום‬</p>
+<h1>‫קידום הוא השמה‬</h1>
+<p class="lead">‫החלק השלישי בכותרת הוא השמה רגילה, ולכן אפשר לכתוב בו כל השמה שמשנה את המונה:‬</p>
+<div class="sumlist">
+<div class="sumline"><p class="sumnum">1</p><h3>‫גדילה בצעד שונה מ־1 או בכפולות‬</h3><div class="sumeg"><p class="code small">i = i + 3  ·  i = i * 2</p><p class="seqs">1, 4, 7, 10 …  ·  1, 2, 4, 8 …</p></div></div>
+<div class="sumline"><p class="sumnum">2</p><h3>‫ערך יורד, ולא רק עולה‬</h3><div class="sumeg"><p class="code small">i = i - 1</p><p class="seqs">10, 9, 8 … 1</p></div></div>
+<div class="sumline"><p class="sumnum">3</p><h3>‫השמה שתלויה בתנאי‬</h3><div class="sumeg"><p class="code small">i = i + ((i % 4 == 0) ? 2 : 5)</p><p class="seqs">100, 102, 107, 112 …</p></div></div>
 </div>
 </section>
 
-<section class="slide" id="hw">
-<p class="eyebrow">‫שיעורי בית‬</p>
-<h2>‫לפעם הבאה‬</h2>
-<div class="hwcard"><p class="ol">1</p><p class="txt">‫הדפיסו את כל החזקות של 2 שאינן גדולות מ־1000.‬</p></div>
-<div class="hwcard"><p class="ol">2</p><p class="txt">‫הדפיסו את הסדרה:‬</p><p class="code small">50 45 40 … 10 5</p></div>
-<div class="hwcard"><p class="ol">3</p><p class="txt">‫הדפיסו בסדר הפוך את המספרים שמדפיסה הלולאה:‬</p><p class="code small">for (int i = 4; i &lt;= 40; i = i + 4)</p></div>
-</section>
 
+<section class="slide" id="feedback">
+<p class="eyebrow">‫משוב‬</p>
+<div class="fbrow">
+<div class="fbtext">
+<h1>‫מה חשבתם על השיעור?‬</h1>
+<p class="lead">‫סרקו את הקוד עם הטלפון ומלאו משוב קצר. זה לוקח דקה, ועוזר לנו לשפר את השיעור הבא.‬</p>
+</div>
+<div class="fbqr"><img src="../../images/LinkToFeedback.jpeg" alt="קוד QR לטופס המשוב" width="560" height="560"></div>
+</div>
+</section>
 </div></div>
 <div id="ui" role="toolbar" aria-label="ניווט במצגת">
 <button type="button" id="bPrev" aria-label="השקף הקודם">→ הקודם</button>
@@ -438,7 +469,7 @@ button.cell.missed{background:#FBFDF8;color:#2F7D4F;border:3px dashed #2F7D4F}
 <aside id="notes" aria-label="הערות דובר"><h4 id="notesTitle"></h4><div id="notesBody"></div></aside>
 <script>
 (function(){
-var NOTES=["מצגת לשיעור עצמו: בכל שקף כותרת ותרגיל להצגה על הלוח.", "רוב התלמידים יכתבו לולאה עם i = i + 1 ועם if (i % 2 == 0). מבקשים מתלמיד אחד לכתוב את הפתרון שלו על הלוח.", "תשובה: 21 סיבובים, אבל רק 11 הדפסות. ב־10 סיבובים הלולאה בודקת ולא מדפיסה.", "נותנים לתלמידים להציע. התשובה: i = i + 2. מי שמציע אותה מסביר למה זה מותר, ומשם עוברים לרעיון המרכזי.", "החלק השלישי בכותרת הוא הוראת השמה רגילה. המשפט נשאר על הלוח עד סוף השיעור.", "משחק בסגנון 7 בום. סופרים בתור מ־1 עד 20, וכל תלמיד אומר מספר אחד. מי שמגיע למספר שהוא ערך של i אומר „בום!“ במקום המספר. אחר כך פותחים את הלוח האינטראקטיבי (הקישור בשקף), ותלמידים ניגשים ללוח ולוחצים על המספרים שהם ערכים של i. כפתור „בדיקה“ מסמן מה נכון, מה סומן בטעות ומה חסר. התשובה: 1, 5, 9, 13, 17. הלולאה נעצרת כש־i מקבל 21, כי 21 &lt; 20 שקרי. שאלות המשך: האם 19 ו־20 הם ערכים של i? כמה סיבובים היו? (5). בלוח אפשר לשנות את ההתחלה, התנאי והצעד ולשחק בלולאה אחרת.", "טבלת מעקב: 1, 4, 7, 10, 13, 16, 19 מודפסים. ב־22 התנאי שקרי והלולאה נעצרת. 7 סיבובים. 20 לא מודפס, כי המונה קופץ מעליו. השורה של 22 היא חלק מהמעקב.", "פלט: 10 9 8 7 6 5 4 3 2 1 ואחריו Liftoff!. השתנו שלושת החלקים: האתחול מתחיל בגדול, התנאי הופך ל־&gt;=, והקידום מחסר.", "קוראים את השאלה, ונותנים לתלמידים לכתוב לולאה לבד לפני שמציגים אותה. גידול ב־50% הוא השמה: i = i + i / 2. בחילוק של שלמים חצי ארנב נעלם: 13 + 6 = 19, ולא 19.5. הפלט: 4, 6, 9, 13, 19, 28, 42, 63, 94 ארנבים, 9 שבועות. בשבוע הבא היו 141 ארנבים, ו־141 <= 100 שקרי. שאלות המשך: האם i = i * 3 / 2 נותן אותו דבר? (כן, 4 6 9 13 19…). ומה עם i = i * (3 / 2)? (3 / 2 הוא 1 בחילוק שלמים, והלולאה לא נעצרת!). כתיב i * 1.5 דורש double.", "14 דקות. עוברים בין הזוגות. לפני ת7 יש בדף הסבר על if מקוצר (? :).", "לכל שאלה: חצי דקה בשקט, ואז בספירה של 3, 2, 1 כולם מרימים אצבעות יחד. סופרים כמה בחרו בכל תשובה, ורק אז חושפים. קריטריון: כל התלמידים, 3 מתוך 4.", "תשובה: ב׳ (17). הסדרה: 1 5 9 13 17. א׳: מניח שהגבול תמיד מודפס. ג׳: מדפיס גם את הערך שבו התנאי נכשל. ד׳: חישב כפולות של 4.", "תשובה: ב׳ (6). הסדרה: 0 5 10 15 20 25. א׳: 30 חלקי 5, ושכח את 0. ג׳: ספר גם את 30, כלומר בלבל בין < ל־<=. ד׳: הגבול הוא לא מספר הסיבובים.", "תשובה: א׳. ב׳: חושב ש־0 לא מקיים את >= 0. ג׳: חושב שהקידום מתבצע לפני הסיבוב הראשון. ד׳: מניח שלולאה תמיד רצה מהקטן לגדול.", "תשובה: ג׳. התנאי 10 <= 0 שקרי כבר בבדיקה הראשונה. א׳ ו־ב׳: קורא את הכוונה ולא את הקוד. ד׳: לא מבין שהתנאי נבדק לפני הסיבוב הראשון.", "תשובה: ד׳. המונה מתרחק מהגבול. ידע תוכן: ב־Java היא נעצרת אחרי 2,147,483,643 סיבובים, כשהמונה גולש לערך שלילי.", "תשובה: א׳. ב׳: מדפיסה 20 15 10. ג׳: לא מדפיסה כלום. ד׳: מדפיסה בסדר הפוך.", "תשובה: ג׳ (‎-2‎). ערכי המונה: 10 6 2 -2. הלולאה נעצרת בערך הראשון שבו התנאי שקרי.", "כל תלמיד משלים במשפט אחד. שלוש הבדיקות: הצעד מקרב לגבול? הקידום הוא השמה שמשתמשת ב־i? מה הערך הראשון שבו התנאי שקרי?", "פתרונות: ב1: for (int i = 1; i <= 1000; i = i * 2). ב2: for (int i = 50; i >= 5; i = i - 5). ב3: for (int i = 40; i >= 4; i = i - 4)."];
+var NOTES=["מצגת לשיעור עצמו: בכל שקף כותרת ותרגיל להצגה על הלוח.", "רוב התלמידים יכתבו לולאה עם i = i + 1 ועם if (i % 2 == 0). מבקשים מתלמיד אחד לכתוב את הפתרון שלו על הלוח.", "תשובה: 21 סיבובים, אבל רק 11 הדפסות. ב־10 סיבובים הלולאה בודקת ולא מדפיסה.", "נותנים לתלמידים להציע. התשובה: i = i + 2. מי שמציע אותה מסביר למה זה מותר, ומשם עוברים לרעיון המרכזי.", "החלק השלישי בכותרת הוא הוראת השמה רגילה. המשפט נשאר על הלוח עד סוף השיעור.", "משחק בסגנון 7 בום. סופרים בתור מ־1 עד 20, וכל תלמיד אומר מספר אחד. מי שמגיע למספר שהוא ערך של i אומר „בום!“ במקום המספר. אחר כך פותחים את הלוח האינטראקטיבי (הקישור בשקף), ותלמידים ניגשים ללוח ולוחצים על המספרים שהם ערכים של i. כפתור „בדיקה“ מסמן מה נכון, מה סומן בטעות ומה חסר. התשובה: 1, 5, 9, 13, 17. הלולאה נעצרת כש־i מקבל 21, כי 21 &lt; 20 שקרי. שאלות המשך: האם 19 ו־20 הם ערכים של i? כמה סיבובים היו? (5). בלוח אפשר לשנות את ההתחלה, התנאי והצעד ולשחק בלולאה אחרת.", "טבלת מעקב: 1, 4, 7, 10, 13, 16, 19 מודפסים. ב־22 התנאי שקרי והלולאה נעצרת. 7 סיבובים. 20 לא מודפס, כי המונה קופץ מעליו. השורה של 22 היא חלק מהמעקב.", "פלט: 10 9 8 7 6 5 4 3 2 1 ואחריו Liftoff!. השתנו שלושת החלקים: האתחול מתחיל בגדול, התנאי הופך ל־&gt;=, והקידום מחסר.", "קוראים את השאלה, ונותנים לתלמידים לכתוב לולאה לבד לפני שמציגים אותה. גידול ב־50% הוא השמה: i = i + i / 2. בחילוק של שלמים חצי ארנב נעלם: 13 + 6 = 19, ולא 19.5. הפלט: 4, 6, 9, 13, 19, 28, 42, 63, 94 ארנבים, 9 שבועות. בשבוע הבא היו 141 ארנבים, ו־141 <= 100 שקרי. שאלות המשך: האם i = i * 3 / 2 נותן אותו דבר? (כן, 4 6 9 13 19…). ומה עם i = i * (3 / 2)? (3 / 2 הוא 1 בחילוק שלמים, והלולאה לא נעצרת!). כתיב i * 1.5 דורש double.", "14 דקות. עוברים בין הזוגות. לפני ת7 יש בדף הסבר על if מקוצר (? :).", "לכל שאלה: חצי דקה בשקט, ואז בספירה של 3, 2, 1 כולם מרימים אצבעות יחד. סופרים כמה בחרו בכל תשובה, ורק אז חושפים. קריטריון: כל התלמידים, 3 מתוך 4.", "תשובה: ב׳ (17). הסדרה: 1 5 9 13 17. א׳: מניח שהגבול תמיד מודפס. ג׳: מדפיס גם את הערך שבו התנאי נכשל. ד׳: חישב כפולות של 4.", "תשובה: ב׳ (6). הסדרה: 0 5 10 15 20 25. א׳: 30 חלקי 5, ושכח את 0. ג׳: ספר גם את 30, כלומר בלבל בין < ל־<=. ד׳: הגבול הוא לא מספר הסיבובים.", "תשובה: א׳. ב׳: חושב ש־0 לא מקיים את >= 0. ג׳: חושב שהקידום מתבצע לפני הסיבוב הראשון. ד׳: מניח שלולאה תמיד רצה מהקטן לגדול.", "תשובה: ג׳. התנאי 10 <= 0 שקרי כבר בבדיקה הראשונה. א׳ ו־ב׳: קורא את הכוונה ולא את הקוד. ד׳: לא מבין שהתנאי נבדק לפני הסיבוב הראשון.", "תשובה: ד׳. המונה מתרחק מהגבול. ידע תוכן: ב־Java היא נעצרת אחרי 2,147,483,643 סיבובים, כשהמונה גולש לערך שלילי.", "תשובה: א׳. ב׳: מדפיסה 20 15 10. ג׳: לא מדפיסה כלום. ד׳: מדפיסה בסדר הפוך.", "תשובה: ג׳ (‎-2‎). ערכי המונה: 10 6 2 -2. הלולאה נעצרת בערך הראשון שבו התנאי שקרי.", "סיכום השיעור: הקידום הוא השמה. עוברים על שלוש התבניות שראינו: צעד שונה מ־1 או כפל (דוגמאות 1 ו־3, הארנבים), ערך יורד (דוגמה 2, השיגור), והשמה שתלויה בתנאי (ת7 בדף התרגול). אפשר לסיים בשאלה בעל־פה: „איך יודעים כמה פעמים לולאה תרוץ?“", "שקף סיום: התלמידים סורקים את קוד ה־QR וממלאים את טופס המשוב (Google Forms). כדאי להשאיר את השקף על המסך בזמן שהתלמידים יוצאים."];
 var slides=[].slice.call(document.querySelectorAll('section.slide'));
 var stage=document.getElementById('stage'), idx=0;
 function fit(){var s=Math.min(window.innerWidth/1920,window.innerHeight/1080);stage.style.transform='scale('+s+')';}
