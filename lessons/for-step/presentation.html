@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>קפיצות המונה בלולאת for: מצגת לשיעור</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400..800&family=Heebo:wght@400..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+section{padding:128px;box-sizing:border-box;background:#F3F6EF;color:#143B2E;text-align:right;font-family:'Heebo',Arial,sans-serif;display:flex;flex-direction:column;gap:40px}
+section.dark{background:#143B2E;color:#F3F6EF}
+section.cover{justify-content:flex-end}
+.eyebrow{font-family:'Rubik',Arial,sans-serif;font-size:32px;font-weight:600;color:#2F7D4F}
+section.dark .eyebrow{color:#9BD77A}
+h1{font-family:'Rubik',Arial,sans-serif;font-size:120px;font-weight:700;line-height:1.05}
+h2{font-family:'Rubik',Arial,sans-serif;font-size:72px;font-weight:700;line-height:1.1}
+h3{font-family:'Rubik',Arial,sans-serif;font-size:44px;font-weight:600;line-height:1.15}
+.lead{font-size:44px;line-height:1.3;color:#4A5A52}
+section.dark .lead{color:#C7DCCF}
+.body{font-size:32px;line-height:1.35;color:#4A5A52}
+section.dark .body{color:#C7DCCF}
+.accent{color:#2F7D4F}
+section.dark .accent{color:#9BD77A}
+.code{font-family:'JetBrains Mono','Courier New',monospace;text-align:left;font-size:36px;background:#E2EBDD;color:#143B2E;padding:16px 28px;border-radius:12px;align-self:flex-end;white-space:nowrap}
+section.dark .code{background:#1E4D3C;color:#F3F6EF}
+.code.small{font-size:28px;padding:10px 18px}
+.spacer{flex:1}
+.row{display:flex;flex-direction:row-reverse;gap:32px;align-items:stretch}
+.card{background:#FBFDF8;border:2px solid #D7E2D1;border-radius:20px;padding:40px;display:flex;flex-direction:column;gap:20px;flex:1}
+.card.hot{background:#143B2E;border-color:#143B2E;color:#F3F6EF}
+.card.hot .body{color:#C7DCCF}
+.num{font-family:'Rubik',Arial,sans-serif;font-size:120px;font-weight:800;line-height:1;color:#2F7D4F}
+section.dark .num{color:#9BD77A}
+.seqrow{display:flex;gap:16px;align-items:center}
+.chip{font-family:'JetBrains Mono','Courier New',monospace;font-size:44px;font-weight:600;background:#143B2E;color:#F3F6EF;border-radius:14px;padding:14px 22px;min-width:min-content}
+.chip.off{background:#F3F6EF;color:#2F7D4F;border:3px dashed #2F7D4F}
+.tag{font-size:32px;font-weight:600;background:#E2EBDD;color:#143B2E;border-radius:40px;padding:10px 28px}
+.bar{display:flex;gap:10px;align-items:stretch}
+.seg{display:flex;flex-direction:column;gap:8px;padding:28px 20px;border-radius:14px;background:#E2EBDD;color:#143B2E}
+.seg.d{background:#143B2E;color:#F3F6EF}
+.seg.o{background:#2F7D4F;color:#F3F6EF}
+.seg .mins{font-family:'Rubik',Arial,sans-serif;font-size:72px;font-weight:800;line-height:1}
+.seg .lbl{font-size:32px;font-weight:600}
+.vote{flex:1;display:flex;flex-direction:column;align-items:center;gap:12px;background:#1E4D3C;border-radius:20px;padding:40px 20px}
+.vote .letter{font-family:'Rubik',Arial,sans-serif;font-size:120px;font-weight:800;line-height:1;color:#9BD77A}
+.vote .fingers{font-size:32px;color:#F3F6EF}
+.quote{font-family:'Rubik',Arial,sans-serif;font-size:72px;font-weight:600;line-height:1.2}
+.byline{font-size:32px;color:#C7DCCF}
+.rise{animation:rise 700ms cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0) * 120ms)}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}}
+
+.bigcode{font-family:'JetBrains Mono','Courier New',monospace;text-align:left;font-size:44px;line-height:1.45;background:#E2EBDD;color:#143B2E;padding:32px 44px;border-radius:16px;align-self:flex-end;white-space:nowrap}
+.split{display:flex;flex-direction:row-reverse;gap:48px;align-items:flex-start}
+.col{display:flex;flex-direction:column;gap:32px;flex:1}
+.trace{font-size:30px;color:#143B2E;width:760px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.opt{display:flex;flex-direction:row-reverse;justify-content:flex-start;align-items:center;gap:28px;background:#FBFDF8;border:2px solid #D7E2D1;border-radius:18px;padding:24px 32px}
+.opt .ol{font-family:'Rubik',Arial,sans-serif;font-size:56px;font-weight:800;line-height:1;color:#2F7D4F}
+.opt .val{font-family:'JetBrains Mono','Courier New',monospace;font-size:40px;text-align:left;white-space:nowrap;color:#143B2E}
+.opt .val.sm{font-size:30px}
+.opt .txt{font-size:36px;color:#143B2E}
+.hwcard{display:flex;flex-direction:row-reverse;justify-content:flex-start;align-items:center;gap:32px;background:#FBFDF8;border:2px solid #D7E2D1;border-radius:18px;padding:28px 36px}
+.hwcard .ol{font-family:'Rubik',Arial,sans-serif;font-size:56px;font-weight:800;line-height:1;color:#2F7D4F}
+.hwcard .txt{font-size:36px;color:#143B2E}
+
+.grid20{display:grid;grid-template-columns:repeat(10,1fr);gap:16px}
+.cell{font-family:'JetBrains Mono','Courier New',monospace;font-size:52px;font-weight:600;text-align:center;color:#143B2E;background:#FBFDF8;border:2px solid #D7E2D1;border-radius:14px;padding:22px 0}
+.cell.fragment{background:#FBFDF8;color:#143B2E;border-color:#D7E2D1;transition:background-color 300ms ease,color 300ms ease,border-color 300ms ease}
+.cell.fragment.visible{background:#2F7D4F;color:#F3F6EF;border-color:#2F7D4F}
+.stopline.fragment{opacity:0;transition:opacity 300ms ease}
+.stopline.fragment.visible{opacity:1}
+
+
+html,body{margin:0;height:100%;background:#0E2A20;overflow:hidden}
+body{font-family:'Heebo',Arial,sans-serif}
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{width:1920px;height:1080px;position:relative;transform-origin:center center;flex:none}
+section.slide{position:absolute;inset:0;width:1920px;height:1080px;display:none;overflow:hidden}
+section.slide.active{display:flex}
+* { margin: 0 }
+h1,h2,h3,p{overflow-wrap:break-word}
+table{border-collapse:separate;border-spacing:0;border:solid #0003;border-width:2px 0 0 2px}
+th,td{padding:.35em .6em;border:solid #0003;border-width:0 2px 2px 0;text-align:center}
+.trace th{font-weight:600}
+.trace td,.trace th{height:48px}
+button.cell{cursor:pointer;width:100%}
+button.cell:hover{border-color:#2F7D4F}
+button.cell.marked{background:#2F7D4F;color:#F3F6EF;border-color:#2F7D4F}
+button.cell.ok{background:#2F7D4F;color:#F3F6EF;border-color:#2F7D4F}
+button.cell.wrong{background:#FBE7E4;color:#B23A2E;border-color:#B23A2E;text-decoration:line-through}
+button.cell.missed{background:#FBFDF8;color:#2F7D4F;border:3px dashed #2F7D4F}
+.boombar{display:flex;flex-direction:row-reverse;gap:20px;align-items:center}
+.bbtn{font-family:'Heebo',Arial,sans-serif;font-size:32px;font-weight:800;border-radius:14px;padding:14px 36px;cursor:pointer;border:3px solid #143B2E;background:#143B2E;color:#F3F6EF}
+.bbtn.ghost{background:transparent;color:#143B2E}
+.bresult{flex:1;font-size:32px;font-weight:600;text-align:right;direction:rtl;color:#143B2E}
+.bresult.good{color:#2F7D4F}.bresult.bad{color:#B23A2E}
+.bresult .seq{direction:ltr;unicode-bidi:isolate;font-family:'JetBrains Mono',monospace;background:#E2EBDD;padding:0 .3em;border-radius:6px}
+
+.sim{display:flex;flex-direction:row-reverse;gap:40px;flex:1;min-height:0}
+.simR{display:flex;flex-direction:column;gap:24px;width:860px}
+.simcode{font-family:'JetBrains Mono','Courier New',monospace;font-size:34px;line-height:1.5;background:#E2EBDD;color:#143B2E;border-radius:16px;padding:22px 26px;direction:ltr;text-align:left;white-space:nowrap}
+.simcode .ln{display:block;border-radius:8px;padding:0 10px;transition:background-color .2s}
+.simcode .ln.hl{background:#9BD77A}
+.simstate{display:flex;flex-direction:row-reverse;gap:24px;align-items:center}
+.vbox{display:flex;flex-direction:column;align-items:center;background:#143B2E;color:#F3F6EF;border-radius:16px;padding:12px 28px;min-width:150px}
+.vlbl{font-family:'JetBrains Mono',monospace;font-size:26px;color:#9BD77A}
+.vval{font-family:'JetBrains Mono',monospace;font-size:64px;font-weight:700;line-height:1.1}
+.simmsg{direction:rtl;flex:1;font-size:32px;font-weight:600;color:#143B2E;text-align:right}
+.simmsg .seq{direction:ltr;unicode-bidi:isolate;font-family:'JetBrains Mono',monospace;background:#E2EBDD;padding:0 .3em;border-radius:6px}
+.simmsg.t{color:#2F7D4F}.simmsg.f{color:#B23A2E}
+.simbtns{display:flex;flex-direction:row-reverse;gap:16px}
+.simL{flex:1;display:flex;flex-direction:row-reverse;gap:20px;min-width:0}
+.console{flex:1;background:#0E2A20;border-radius:16px;padding:20px 24px;display:flex;flex-direction:column;gap:10px;direction:ltr;text-align:left}
+.clabel{font-family:'Heebo',sans-serif;font-size:24px;color:#9BD77A;text-align:right}
+.cout{font-family:'JetBrains Mono',monospace;font-size:36px;color:#F3F6EF;line-height:1.4;white-space:pre-wrap;word-break:break-all;min-height:1.4em}
+.cout.lift{color:#F2A65A;font-weight:700}
+.sky{width:230px;position:relative;overflow:hidden;border-radius:16px;background:linear-gradient(#0E2A20,#1E4D3C 70%,#2F7D4F)}
+.stars{position:absolute;inset:0;background-image:radial-gradient(#F3F6EF 1.5px,transparent 2px),radial-gradient(#C7DCCF 1px,transparent 1.5px);background-size:60px 70px,37px 45px;background-position:10px 8px,25px 30px;opacity:.6}
+.pad{position:absolute;bottom:0;left:0;right:0;height:26px;background:#143B2E}
+.rocket{position:absolute;left:55px;bottom:26px;width:120px;height:230px}
+.rocket .flame{opacity:0;transform-origin:60px 166px}
+.rocket.go .flame{opacity:1;animation:flick 120ms infinite alternate}
+.rocket.go{animation:launch 2.6s cubic-bezier(.55,0,.8,.4) forwards}
+@keyframes flick{from{transform:scaleY(.85)}to{transform:scaleY(1.15)}}
+@keyframes launch{0%{transform:translate(0,0)}6%{transform:translate(-3px,0)}12%{transform:translate(3px,0)}18%{transform:translate(-2px,-4px)}100%{transform:translate(0,-900px)}}
+.smoke{position:absolute;bottom:20px;width:70px;height:70px;border-radius:50%;background:#C7DCCF;opacity:0}
+.smoke.s1{left:30px}.smoke.s2{left:90px}.smoke.s3{left:150px}
+.sky.go .smoke{animation:puff 1.6s ease-out forwards}
+.sky.go .s2{animation-delay:.15s}.sky.go .s3{animation-delay:.3s}
+@keyframes puff{0%{opacity:.9;transform:scale(.3)}100%{opacity:0;transform:scale(2.2) translateY(-30px)}}
+@media (prefers-reduced-motion:reduce){.rocket.go{animation:none;transform:translateY(-900px)}.rocket.go .flame{animation:none}.sky.go .smoke{animation:none}}
+
+
+.rq{font-size:36px}
+#ex3 .sim{gap:32px}
+.rcode{visibility:hidden;font-size:30px}
+.rcode.shown{visibility:visible}
+.rout{display:flex;flex-direction:column;gap:2px}
+.rline{font-family:'JetBrains Mono',monospace;font-size:32px;line-height:1.3;color:#F3F6EF;direction:rtl;text-align:right;animation:rin .3s ease both}
+.rline b{color:#9BD77A}
+@keyframes rin{from{opacity:0;transform:translateY(8px)}}
+
+
+.rcons{flex:none;width:250px}
+.chart{flex:1;background:#FBFDF8;border:2px solid #D7E2D1;border-radius:16px;padding:18px 22px 10px;display:flex;flex-direction:column;min-width:0}
+.ctitle{font-size:26px;font-weight:700;color:#143B2E;text-align:right;direction:rtl}
+.plot{flex:1;display:flex;gap:10px;direction:ltr;min-height:0;margin-top:8px}
+.ylab{writing-mode:vertical-rl;transform:rotate(180deg);font-size:22px;color:#4A5A52;text-align:center}
+.slots{flex:1;display:flex;gap:10px;align-items:flex-end;border-bottom:3px solid #143B2E;border-left:3px solid #143B2E;padding:0 8px;position:relative}
+.slot{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;position:relative}
+.bar{width:100%;height:0;background:#2F7D4F;border-radius:8px 8px 0 0;transition:height .45s cubic-bezier(.2,.7,.2,1)}
+.bval{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:#143B2E;height:30px;opacity:0;transition:opacity .3s}
+.bval.on{opacity:1}
+.wk{position:absolute;bottom:-34px;font-family:'JetBrains Mono',monospace;font-size:22px;color:#4A5A52}
+.xlab{margin-top:38px;font-size:22px;color:#4A5A52;text-align:center;direction:rtl}
+
+
+#ex3 .bar{background-color:#E2EBDD;background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2044%2040%27%3E%3Cg%20fill%3D%27%232F7D4F%27%3E%3Cellipse%20cx%3D%2724%27%20cy%3D%279%27%20rx%3D%273.2%27%20ry%3D%278.5%27%20transform%3D%27rotate%28-12%2024%209%29%27/%3E%3Cellipse%20cx%3D%2731%27%20cy%3D%279%27%20rx%3D%273.2%27%20ry%3D%278.5%27%20transform%3D%27rotate%2814%2031%209%29%27/%3E%3Ccircle%20cx%3D%2729%27%20cy%3D%2721%27%20r%3D%277.5%27/%3E%3Cellipse%20cx%3D%2718%27%20cy%3D%2730%27%20rx%3D%2713%27%20ry%3D%278.5%27/%3E%3Ccircle%20cx%3D%275%27%20cy%3D%2728%27%20r%3D%273.8%27/%3E%3Cellipse%20cx%3D%2726%27%20cy%3D%2737%27%20rx%3D%275%27%20ry%3D%272.5%27/%3E%3C/g%3E%3Ccircle%20cx%3D%2731.5%27%20cy%3D%2719.5%27%20r%3D%271.4%27%20fill%3D%27%23FBFDF8%27/%3E%3C/svg%3E");background-repeat:repeat-y;background-position:center bottom;background-size:auto var(--ih,24px);border-radius:6px 6px 0 0}
+.legend10{display:flex;flex-direction:row-reverse;align-items:center;gap:8px;font-size:22px;color:#4A5A52;direction:rtl}
+.legend10 .ic{width:30px;height:27px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2044%2040%27%3E%3Cg%20fill%3D%27%232F7D4F%27%3E%3Cellipse%20cx%3D%2724%27%20cy%3D%279%27%20rx%3D%273.2%27%20ry%3D%278.5%27%20transform%3D%27rotate%28-12%2024%209%29%27/%3E%3Cellipse%20cx%3D%2731%27%20cy%3D%279%27%20rx%3D%273.2%27%20ry%3D%278.5%27%20transform%3D%27rotate%2814%2031%209%29%27/%3E%3Ccircle%20cx%3D%2729%27%20cy%3D%2721%27%20r%3D%277.5%27/%3E%3Cellipse%20cx%3D%2718%27%20cy%3D%2730%27%20rx%3D%2713%27%20ry%3D%278.5%27/%3E%3Ccircle%20cx%3D%275%27%20cy%3D%2728%27%20r%3D%273.8%27/%3E%3Cellipse%20cx%3D%2726%27%20cy%3D%2737%27%20rx%3D%275%27%20ry%3D%272.5%27/%3E%3C/g%3E%3Ccircle%20cx%3D%2731.5%27%20cy%3D%2719.5%27%20r%3D%271.4%27%20fill%3D%27%23FBFDF8%27/%3E%3C/svg%3E") center/contain no-repeat}
+
+
+.opt[role=button]{cursor:pointer;transition:background-color .2s,border-color .2s,box-shadow .2s}
+.opt[role=button]:hover{border-color:#2F7D4F}
+.opt.sel{border:4px solid #2F7D4F;background:#E2EBDD;box-shadow:0 0 0 4px #9BD77A55}
+.opt.right{border:4px solid #2F7D4F;background:#2F7D4F}
+.opt.right .ol,.opt.right .val,.opt.right .txt{color:#F3F6EF}
+.opt.miss{border:4px solid #B23A2E;background:#FBE7E4}
+.qbar{display:flex;flex-direction:row-reverse;gap:16px;margin-top:8px}
+.qbar .bbtn{font-size:26px;padding:8px 26px}
+
+#ui{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:8px;align-items:center;background:#143B2Ecc;color:#F3F6EF;padding:6px 10px;border-radius:30px;font:600 15px 'Heebo',Arial,sans-serif;direction:rtl;opacity:.25;transition:opacity .2s;z-index:10}
+#ui:hover,#ui:focus-within{opacity:1}
+#ui button{font:inherit;color:inherit;background:transparent;border:0;cursor:pointer;padding:6px 10px;border-radius:20px}
+#ui button:hover{background:#ffffff22}
+#notes{position:fixed;right:0;top:0;bottom:0;width:min(440px,90vw);background:#F3F6EF;color:#143B2E;direction:rtl;padding:24px 24px 80px;box-sizing:border-box;overflow:auto;font:18px/1.6 'Heebo',Arial,sans-serif;box-shadow:-8px 0 24px #0004;transform:translateX(100%);transition:transform .25s;z-index:20}
+#notes.open{transform:none}
+#notes h4{margin:0 0 8px;font-size:15px;color:#2F7D4F}
+
+</style>
+</head>
+<body>
+<div id="viewport"><div id="stage">
+<section id="cover" class="slide dark cover">
+<p class="eyebrow">‫יסודות מדעי המחשב · ביצוע חוזר‬</p>
+<h1>‫קפיצות המונה‬<br>‫בלולאת for‬</h1>
+<p class="lead">‫כשהמונה לא מתקדם ב־1‬</p>
+</section>
+
+<section class="slide" id="open1">
+<p class="eyebrow">‫פתיח‬</p>
+<h2>‫הדפיסו את כל המספרים הזוגיים מ־0 עד 20‬</h2>
+<p class="lead">‫כתבו קטע תכנית. יש לכם 2 דקות.‬</p>
+</section>
+
+<section class="slide" id="open2">
+<p class="eyebrow">‫פתיח‬</p>
+<h2>‫כמה סיבובים? כמה הדפסות?‬</h2>
+<p class="bigcode">for (int i = 0; i &lt;= 20; i = i + 1) {<br>&#160;&#160;&#160;&#160;if (i % 2 == 0) {<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;System.out.print(i + " ");<br>&#160;&#160;&#160;&#160;}<br>}</p>
+</section>
+
+<section class="slide" id="open3">
+<p class="eyebrow">‫פתיח‬</p>
+<h2>‫אותו פלט ב־11 סיבובים, בלי if?‬</h2>
+<p class="bigcode">for (int i = 0; i &lt;= 20; ____________)<br>&#160;&#160;&#160;&#160;System.out.print(i + " ");</p>
+</section>
+
+<section id="key" class="slide dark">
+<p class="eyebrow">‫הרעיון המרכזי‬</p>
+<h1>‫הקידום הוא השמה.‬</h1>
+<p class="lead">‫כל השמה שמשנה את המונה.‬</p>
+<div class="spacer"></div>
+<div class="row">
+<p class="code">i = i + 3</p>
+<p class="code">i = i - 1</p>
+<p class="code">i = i * 2</p>
+</div>
+</section>
+
+<section class="slide" id="boom">
+<p class="eyebrow">‫חימום · בום של לולאה‬</p>
+<h2>‫סמנו את כל הערכים ש־i מקבל‬</h2>
+<p class="bigcode">for (int i = 1; i &lt; 20; i = i + 4)</p>
+<div class="grid20" id="boomGrid"><button type="button" class="cell bcell" data-v="1">1</button><button type="button" class="cell bcell" data-v="2">2</button><button type="button" class="cell bcell" data-v="3">3</button><button type="button" class="cell bcell" data-v="4">4</button><button type="button" class="cell bcell" data-v="5">5</button><button type="button" class="cell bcell" data-v="6">6</button><button type="button" class="cell bcell" data-v="7">7</button><button type="button" class="cell bcell" data-v="8">8</button><button type="button" class="cell bcell" data-v="9">9</button><button type="button" class="cell bcell" data-v="10">10</button><button type="button" class="cell bcell" data-v="11">11</button><button type="button" class="cell bcell" data-v="12">12</button><button type="button" class="cell bcell" data-v="13">13</button><button type="button" class="cell bcell" data-v="14">14</button><button type="button" class="cell bcell" data-v="15">15</button><button type="button" class="cell bcell" data-v="16">16</button><button type="button" class="cell bcell" data-v="17">17</button><button type="button" class="cell bcell" data-v="18">18</button><button type="button" class="cell bcell" data-v="19">19</button><button type="button" class="cell bcell" data-v="20">20</button></div>
+<div class="boombar">
+<p class="bresult" id="boomResult"></p>
+<button type="button" class="bbtn ghost" id="boomClear">נקה</button>
+<button type="button" class="bbtn ghost" id="boomShow">הצג תשובה</button>
+<button type="button" class="bbtn" id="boomCheck">בדיקה</button>
+</div>
+</section>
+<section class="slide" id="ex1">
+<p class="eyebrow">‫הקנייה · דוגמה 1‬</p>
+<h2>‫האם 20 יודפס?‬</h2>
+<div class="split">
+<div class="col">
+<p class="bigcode">for (int i = 1; i &lt;= 20; i = i + 3)<br>&#160;&#160;&#160;&#160;System.out.print(i + " ");</p>
+<p class="lead">‫חוזים, ורק אחר כך עוקבים.‬</p>
+</div>
+<table class="trace">
+<tr><th>‫פלט‬</th><th style="width:30%">i &lt;= 20</th><th style="width:30%">i</th></tr>
+<tr><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr><tr><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr><tr><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr><tr><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr><tr><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr><tr><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr><tr><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr><tr><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr>
+</table>
+</div>
+</section>
+
+<section class="slide" id="ex2">
+<p class="eyebrow">‫הקנייה · דוגמה 2‬</p>
+<h2>‫ספירה לאחור: מה יודפס?‬</h2>
+<div class="sim">
+<div class="simR">
+<div class="simcode" aria-label="הקוד"><span class="ln" id="L1">for (int i = 10; i &gt;= 1; i = i - 1)</span><span class="ln" id="L2">&#160;&#160;&#160;&#160;System.out.print(i + " ");</span><span class="ln" id="L3">System.out.println("Liftoff!");</span></div>
+<div class="simstate"><div class="vbox"><span class="vlbl">i</span><span class="vval" id="simI">?</span></div><p class="simmsg" id="simMsg">‫לחצו „הרץ“ או „צעד“‬</p></div>
+<div class="simbtns"><button type="button" class="bbtn" id="simRun">הרץ ▶</button><button type="button" class="bbtn ghost" id="simStep">צעד</button><button type="button" class="bbtn ghost" id="simReset">אפס</button></div>
+</div>
+<div class="simL">
+<div class="console" aria-live="polite"><p class="clabel">פלט</p><p class="cout" id="simOut"></p><p class="cout lift" id="simLift"></p></div>
+<div class="sky" id="sky" aria-hidden="true">
+<div class="stars"></div>
+<div class="rocket" id="rocket">
+<svg width="120" height="230" viewBox="0 0 120 230">
+<path d="M60 4 C90 40 96 90 92 150 L28 150 C24 90 30 40 60 4 Z" fill="#F3F6EF" stroke="#143B2E" stroke-width="4"/>
+<circle cx="60" cy="75" r="16" fill="#9BD77A" stroke="#143B2E" stroke-width="4"/>
+<path d="M28 115 L6 160 L30 152 Z" fill="#2F7D4F" stroke="#143B2E" stroke-width="4" stroke-linejoin="round"/>
+<path d="M92 115 L114 160 L90 152 Z" fill="#2F7D4F" stroke="#143B2E" stroke-width="4" stroke-linejoin="round"/>
+<path d="M44 150 L76 150 L72 164 L48 164 Z" fill="#2F7D4F" stroke="#143B2E" stroke-width="4"/>
+<g class="flame"><path d="M48 166 C50 196 60 226 60 226 C60 226 70 196 72 166 Z" fill="#F2A65A"/><path d="M53 166 C55 186 60 206 60 206 C60 206 65 186 67 166 Z" fill="#FFE08A"/></g>
+</svg>
+</div>
+<div class="pad"></div>
+<div class="smoke s1"></div><div class="smoke s2"></div><div class="smoke s3"></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="slide" id="ex3">
+<p class="eyebrow">‫הקנייה · דוגמה 3: השמה שאינה חיבור‬</p>
+<h2>‫כמה ארנבים יהיו בכל שבוע?‬</h2>
+<p class="lead rq">‫בהתחלה יש 4 ארנבים. בכל שבוע מספר הארנבים גדל ב־50%. כתבו לולאה שמדפיסה את מספר הארנבים בכל שבוע, כל עוד הוא לא עולה על 100.‬</p>
+<div class="sim">
+<div class="simR">
+<div class="simcode rcode" id="rabCode"><span class="ln" id="R1">for (int i = 4; i &lt;= 100; i = i + i / 2)</span><span class="ln" id="R2">&#160;&#160;&#160;&#160;System.out.println(i + " <bdi>ארנבים</bdi>");</span></div>
+<div class="simbtns"><button type="button" class="bbtn" id="rabRun">הרץ ▶</button><button type="button" class="bbtn ghost" id="rabShow">הצג את הלולאה</button><button type="button" class="bbtn ghost" id="rabReset">אפס</button></div>
+<p class="simmsg" id="rabMsg"></p>
+</div>
+<div class="simL">
+<div class="chart" aria-label="גרף מספר הארנבים לפי שבוע">
+<p class="ctitle">מספר הארנבים לפי שבוע</p>
+<div class="legend10"><span class="ic" aria-hidden="true"></span><span>= 10 ארנבים</span></div>
+<div class="plot"><div class="ylab">ארנבים</div><div class="slots"><div class="slot"><div class="bval" id="bv1"></div><div class="bar" id="bar1"></div><div class="wk">1</div></div><div class="slot"><div class="bval" id="bv2"></div><div class="bar" id="bar2"></div><div class="wk">2</div></div><div class="slot"><div class="bval" id="bv3"></div><div class="bar" id="bar3"></div><div class="wk">3</div></div><div class="slot"><div class="bval" id="bv4"></div><div class="bar" id="bar4"></div><div class="wk">4</div></div><div class="slot"><div class="bval" id="bv5"></div><div class="bar" id="bar5"></div><div class="wk">5</div></div><div class="slot"><div class="bval" id="bv6"></div><div class="bar" id="bar6"></div><div class="wk">6</div></div><div class="slot"><div class="bval" id="bv7"></div><div class="bar" id="bar7"></div><div class="wk">7</div></div><div class="slot"><div class="bval" id="bv8"></div><div class="bar" id="bar8"></div><div class="wk">8</div></div><div class="slot"><div class="bval" id="bv9"></div><div class="bar" id="bar9"></div><div class="wk">9</div></div></div></div>
+<p class="xlab">שבוע</p>
+</div>
+<div class="console rcons"><p class="clabel">פלט</p><div class="rout" id="rabOut"></div></div>
+</div>
+</div>
+</section>
+
+<section class="slide" id="practice">
+<p class="eyebrow">‫תרגול‬</p>
+<h2>‫עבודה בזוגות‬</h2>
+<p class="lead">‫דף התרגול · שאלות ת1 עד ת7‬</p>
+<div class="spacer"></div>
+<div class="row">
+<p class="tag">‫רמה א · חיזוי‬</p><p class="tag">‫רמה ב · השלמת כותרת‬</p><p class="tag">‫רמה ג · צעד שמשתנה‬</p>
+</div>
+<p class="body">‫עוקבים בטבלה, לא מנחשים.‬</p>
+</section>
+
+<section id="assess" class="slide dark">
+<p class="eyebrow">‫הערכה‬</p>
+<h1>‫חושבים לבד.‬<br>‫מצביעים יחד.‬</h1>
+<div class="spacer"></div>
+<div class="row">
+<div class="vote"><p class="letter">‫א‬</p><p class="fingers">‫אצבע אחת‬</p></div>
+<div class="vote"><p class="letter">‫ב‬</p><p class="fingers">‫שתי אצבעות‬</p></div>
+<div class="vote"><p class="letter">‫ג‬</p><p class="fingers">‫שלוש אצבעות‬</p></div>
+<div class="vote"><p class="letter">‫ד‬</p><p class="fingers">‫ארבע אצבעות‬</p></div>
+</div>
+</section>
+
+<section class="slide" id="q1">
+<p class="eyebrow">‫הערכה · שאלה 1 מתוך 4‬</p>
+<h2>‫מה הערך האחרון שיודפס?‬</h2>
+<p class="bigcode">for (int i = 1; i &lt;= 20; i = i + 4)<br>&#160;&#160;&#160;&#160;System.out.print(i + " ");</p>
+<div class="opts" data-ans="ב">
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ב‬</p><p class="val">17</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫א‬</p><p class="val">20</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ד‬</p><p class="val">16</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ג‬</p><p class="val">21</p></div>
+</div>
+<div class="qbar"><button type="button" class="bbtn ghost qshow">הצג תשובה</button><button type="button" class="bbtn ghost qclear">נקה</button></div>
+</section>
+
+<section class="slide" id="q2">
+<p class="eyebrow">‫הערכה · שאלה 2 מתוך 4‬</p>
+<h2>‫כמה פעמים תתבצע הלולאה?‬</h2>
+<p class="bigcode">for (int i = 0; i &lt; 30; i = i + 5)<br>&#160;&#160;&#160;&#160;System.out.print(i + " ");</p>
+<div class="opts" data-ans="ב">
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ב‬</p><p class="val">6</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫א‬</p><p class="val">5</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ד‬</p><p class="val">30</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ג‬</p><p class="val">7</p></div>
+</div>
+<div class="qbar"><button type="button" class="bbtn ghost qshow">הצג תשובה</button><button type="button" class="bbtn ghost qclear">נקה</button></div>
+</section>
+
+<section class="slide" id="q3">
+<p class="eyebrow">‫הערכה · שאלה 3 מתוך 4‬</p>
+<h2>‫מה יודפס?‬</h2>
+<p class="bigcode">for (int i = 12; i &gt;= 0; i = i - 3)<br>&#160;&#160;&#160;&#160;System.out.print(i + " ");</p>
+<div class="opts" data-ans="א">
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ב‬</p><p class="val">12 9 6 3</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫א‬</p><p class="val">12 9 6 3 0</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ד‬</p><p class="val">0 3 6 9 12</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ג‬</p><p class="val">9 6 3 0</p></div>
+</div>
+<div class="qbar"><button type="button" class="bbtn ghost qshow">הצג תשובה</button><button type="button" class="bbtn ghost qclear">נקה</button></div>
+</section>
+
+<section class="slide" id="q4">
+<p class="eyebrow">‫הערכה · שאלה 4 מתוך 4‬</p>
+<h2>‫מה יקרה?‬</h2>
+<p class="bigcode">for (int i = 10; i &lt;= 0; i = i - 2)<br>&#160;&#160;&#160;&#160;System.out.print(i + " ");</p>
+<div class="opts" data-ans="ג">
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ב‬</p><p class="txt">‫יודפס‬</p><p class="val">10 8 6 4 2</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫א‬</p><p class="txt">‫יודפס‬</p><p class="val">10 8 6 4 2 0</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ד‬</p><p class="txt">‫הלולאה לא תיעצר‬</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ג‬</p><p class="txt">‫לא יודפס כלום‬</p></div>
+</div>
+<div class="qbar"><button type="button" class="bbtn ghost qshow">הצג תשובה</button><button type="button" class="bbtn ghost qclear">נקה</button></div>
+</section>
+
+<section class="slide" id="q5">
+<p class="eyebrow">‫הרחבה‬</p>
+<h2>‫מה יקרה?‬</h2>
+<p class="bigcode">for (int i = 5; i &gt; 0; i = i + 1)<br>&#160;&#160;&#160;&#160;System.out.print(i + " ");</p>
+<div class="opts" data-ans="ד">
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ב‬</p><p class="txt">‫יודפס רק‬</p><p class="val">5</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫א‬</p><p class="txt">‫יודפס‬</p><p class="val">5 4 3 2 1</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ד‬</p><p class="txt">‫הלולאה (בפועל) לא תיעצר‬</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ג‬</p><p class="txt">‫לא יודפס כלום‬</p></div>
+</div>
+<div class="qbar"><button type="button" class="bbtn ghost qshow">הצג תשובה</button><button type="button" class="bbtn ghost qclear">נקה</button></div>
+</section>
+
+<section class="slide" id="q6">
+<p class="eyebrow">‫הרחבה‬</p>
+<h2>‫איזו כותרת תדפיס בדיוק את הסדרה?‬</h2>
+<p class="bigcode">20 15 10 5</p>
+<div class="opts" data-ans="א">
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ב‬</p><p class="val sm">for (int i = 20; i &gt; 5; i = i - 5)</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫א‬</p><p class="val sm">for (int i = 20; i &gt;= 5; i = i - 5)</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ד‬</p><p class="val sm">for (int i = 5; i &lt;= 20; i = i + 5)</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ג‬</p><p class="val sm">for (int i = 20; i &lt;= 5; i = i - 5)</p></div>
+</div>
+<div class="qbar"><button type="button" class="bbtn ghost qshow">הצג תשובה</button><button type="button" class="bbtn ghost qclear">נקה</button></div>
+</section>
+
+<section class="slide" id="q7">
+<p class="eyebrow">‫הרחבה‬</p>
+<h2>‫מה ערך המונה אחרי הלולאה?‬</h2>
+<p class="bigcode">int i;<br>for (i = 10; i &gt; 0; i = i - 4) { }<br>System.out.println(i);</p>
+<div class="opts" data-ans="ג">
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ב‬</p><p class="val">0</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫א‬</p><p class="val">2</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ד‬</p><p class="val">4</p></div>
+<div class="opt" role="button" tabindex="0" aria-pressed="false"><p class="ol">‫ג‬</p><p class="val">-2</p></div>
+</div>
+<div class="qbar"><button type="button" class="bbtn ghost qshow">הצג תשובה</button><button type="button" class="bbtn ghost qclear">נקה</button></div>
+</section>
+
+<section class="slide" id="exit">
+<p class="eyebrow">‫סיכום · כרטיס יציאה‬</p>
+<p class="quote">‫„כדי לדעת כמה פעמים לולאה תרוץ, אני…“‬</p>
+<div class="spacer"></div>
+<div class="row">
+<p class="tag">‫כיוון‬</p><p class="tag">‫השמה‬</p><p class="tag">‫ערך אחרון‬</p>
+</div>
+</section>
+
+<section class="slide" id="hw">
+<p class="eyebrow">‫שיעורי בית‬</p>
+<h2>‫לפעם הבאה‬</h2>
+<div class="hwcard"><p class="ol">1</p><p class="txt">‫הדפיסו את כל החזקות של 2 שאינן גדולות מ־1000.‬</p></div>
+<div class="hwcard"><p class="ol">2</p><p class="txt">‫הדפיסו את הסדרה:‬</p><p class="code small">50 45 40 … 10 5</p></div>
+<div class="hwcard"><p class="ol">3</p><p class="txt">‫הדפיסו בסדר הפוך את המספרים שמדפיסה הלולאה:‬</p><p class="code small">for (int i = 4; i &lt;= 40; i = i + 4)</p></div>
+</section>
+
+</div></div>
+<div id="ui" role="toolbar" aria-label="ניווט במצגת">
+<button type="button" id="bPrev" aria-label="השקף הקודם">→ הקודם</button>
+<span id="count" aria-live="polite"></span>
+<button type="button" id="bNext" aria-label="השקף הבא">הבא ←</button>
+<button type="button" id="bNotes">הערות (N)</button>
+<button type="button" id="bFull">מסך מלא (F)</button>
+</div>
+<aside id="notes" aria-label="הערות דובר"><h4 id="notesTitle"></h4><div id="notesBody"></div></aside>
+<script>
+(function(){
+var NOTES=["מצגת לשיעור עצמו: בכל שקף כותרת ותרגיל להצגה על הלוח.", "רוב התלמידים יכתבו לולאה עם i = i + 1 ועם if (i % 2 == 0). מבקשים מתלמיד אחד לכתוב את הפתרון שלו על הלוח.", "תשובה: 21 סיבובים, אבל רק 11 הדפסות. ב־10 סיבובים הלולאה בודקת ולא מדפיסה.", "נותנים לתלמידים להציע. התשובה: i = i + 2. מי שמציע אותה מסביר למה זה מותר, ומשם עוברים לרעיון המרכזי.", "החלק השלישי בכותרת הוא הוראת השמה רגילה. המשפט נשאר על הלוח עד סוף השיעור.", "משחק בסגנון 7 בום. סופרים בתור מ־1 עד 20, וכל תלמיד אומר מספר אחד. מי שמגיע למספר שהוא ערך של i אומר „בום!“ במקום המספר. אחר כך פותחים את הלוח האינטראקטיבי (הקישור בשקף), ותלמידים ניגשים ללוח ולוחצים על המספרים שהם ערכים של i. כפתור „בדיקה“ מסמן מה נכון, מה סומן בטעות ומה חסר. התשובה: 1, 5, 9, 13, 17. הלולאה נעצרת כש־i מקבל 21, כי 21 &lt; 20 שקרי. שאלות המשך: האם 19 ו־20 הם ערכים של i? כמה סיבובים היו? (5). בלוח אפשר לשנות את ההתחלה, התנאי והצעד ולשחק בלולאה אחרת.", "טבלת מעקב: 1, 4, 7, 10, 13, 16, 19 מודפסים. ב־22 התנאי שקרי והלולאה נעצרת. 7 סיבובים. 20 לא מודפס, כי המונה קופץ מעליו. השורה של 22 היא חלק מהמעקב.", "פלט: 10 9 8 7 6 5 4 3 2 1 ואחריו Liftoff!. השתנו שלושת החלקים: האתחול מתחיל בגדול, התנאי הופך ל־&gt;=, והקידום מחסר.", "קוראים את השאלה, ונותנים לתלמידים לכתוב לולאה לבד לפני שמציגים אותה. גידול ב־50% הוא השמה: i = i + i / 2. בחילוק של שלמים חצי ארנב נעלם: 13 + 6 = 19, ולא 19.5. הפלט: 4, 6, 9, 13, 19, 28, 42, 63, 94 ארנבים, 9 שבועות. בשבוע הבא היו 141 ארנבים, ו־141 <= 100 שקרי. שאלות המשך: האם i = i * 3 / 2 נותן אותו דבר? (כן, 4 6 9 13 19…). ומה עם i = i * (3 / 2)? (3 / 2 הוא 1 בחילוק שלמים, והלולאה לא נעצרת!). כתיב i * 1.5 דורש double.", "14 דקות. עוברים בין הזוגות. לפני ת7 יש בדף הסבר על if מקוצר (? :).", "לכל שאלה: חצי דקה בשקט, ואז בספירה של 3, 2, 1 כולם מרימים אצבעות יחד. סופרים כמה בחרו בכל תשובה, ורק אז חושפים. קריטריון: כל התלמידים, 3 מתוך 4.", "תשובה: ב׳ (17). הסדרה: 1 5 9 13 17. א׳: מניח שהגבול תמיד מודפס. ג׳: מדפיס גם את הערך שבו התנאי נכשל. ד׳: חישב כפולות של 4.", "תשובה: ב׳ (6). הסדרה: 0 5 10 15 20 25. א׳: 30 חלקי 5, ושכח את 0. ג׳: ספר גם את 30, כלומר בלבל בין < ל־<=. ד׳: הגבול הוא לא מספר הסיבובים.", "תשובה: א׳. ב׳: חושב ש־0 לא מקיים את >= 0. ג׳: חושב שהקידום מתבצע לפני הסיבוב הראשון. ד׳: מניח שלולאה תמיד רצה מהקטן לגדול.", "תשובה: ג׳. התנאי 10 <= 0 שקרי כבר בבדיקה הראשונה. א׳ ו־ב׳: קורא את הכוונה ולא את הקוד. ד׳: לא מבין שהתנאי נבדק לפני הסיבוב הראשון.", "תשובה: ד׳. המונה מתרחק מהגבול. ידע תוכן: ב־Java היא נעצרת אחרי 2,147,483,643 סיבובים, כשהמונה גולש לערך שלילי.", "תשובה: א׳. ב׳: מדפיסה 20 15 10. ג׳: לא מדפיסה כלום. ד׳: מדפיסה בסדר הפוך.", "תשובה: ג׳ (‎-2‎). ערכי המונה: 10 6 2 -2. הלולאה נעצרת בערך הראשון שבו התנאי שקרי.", "כל תלמיד משלים במשפט אחד. שלוש הבדיקות: הצעד מקרב לגבול? הקידום הוא השמה שמשתמשת ב־i? מה הערך הראשון שבו התנאי שקרי?", "פתרונות: ב1: for (int i = 1; i <= 1000; i = i * 2). ב2: for (int i = 50; i >= 5; i = i - 5). ב3: for (int i = 40; i >= 4; i = i - 4)."];
+var slides=[].slice.call(document.querySelectorAll('section.slide'));
+var stage=document.getElementById('stage'), idx=0;
+function fit(){var s=Math.min(window.innerWidth/1920,window.innerHeight/1080);stage.style.transform='scale('+s+')';}
+window.addEventListener('resize',fit);fit();
+function show(n){
+  idx=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach(function(s,i){s.classList.toggle('active',i===idx);});
+  document.getElementById('count').textContent=(idx+1)+' / '+slides.length;
+  document.getElementById('notesTitle').textContent='הערות לשקף '+(idx+1);
+  document.getElementById('notesBody').textContent=NOTES[idx]||'אין הערות לשקף הזה.';
+  try{history.replaceState(null,'','#s'+(idx+1));}catch(e){}
+}
+function next(){show(idx+1);} function prev(){show(idx-1);}
+document.getElementById('bNext').onclick=next;
+document.getElementById('bPrev').onclick=prev;
+document.getElementById('bNotes').onclick=function(){document.getElementById('notes').classList.toggle('open');};
+document.getElementById('bFull').onclick=function(){try{if(!document.fullscreenElement)document.documentElement.requestFullscreen().catch(function(){});else document.exitFullscreen();}catch(e){}};
+document.addEventListener('keydown',function(e){
+  if(e.target.closest&&e.target.closest('input,select,textarea'))return;
+  if(['ArrowLeft','PageDown',' '].indexOf(e.key)>=0){e.preventDefault();next();}
+  else if(['ArrowRight','PageUp'].indexOf(e.key)>=0){e.preventDefault();prev();}
+  else if(e.key==='Home')show(0); else if(e.key==='End')show(slides.length-1);
+  else if(e.key==='n'||e.key==='N'||e.key==='מ')document.getElementById('bNotes').click();
+  else if(e.key==='f'||e.key==='F'||e.key==='כ')document.getElementById('bFull').click();
+});
+var m=/^#s(\d+)$/.exec(location.hash); show(m?parseInt(m[1],10)-1:0);
+window.addEventListener('hashchange',function(){var m=/^#s(\d+)$/.exec(location.hash);if(m&&parseInt(m[1],10)-1!==idx)show(parseInt(m[1],10)-1);});
+
+// interactive boom board
+var grid=document.getElementById('boomGrid'), res=document.getElementById('boomResult');
+if(grid){
+  var ANSWER=[], i; for(i=1;i<20;i=i+4)ANSWER.push(i); var STOP=i; var set=new Set(ANSWER), marked=new Set();
+  function reset(){grid.querySelectorAll('.cell').forEach(function(c){c.classList.remove('ok','wrong','missed');});res.innerHTML='';res.className='bresult';}
+  grid.addEventListener('click',function(e){var c=e.target.closest('.cell');if(!c)return;var v=+c.dataset.v;reset();
+    if(marked.has(v)){marked.delete(v);c.classList.remove('marked');c.setAttribute('aria-pressed','false');}
+    else{marked.add(v);c.classList.add('marked');c.setAttribute('aria-pressed','true');}
+    e.stopPropagation();});
+  function seq(){return '<span class="seq">'+ANSWER.join(' ')+'</span>';}
+  document.getElementById('boomCheck').onclick=function(){var w=0,ms=0;
+    grid.querySelectorAll('.cell').forEach(function(c){var v=+c.dataset.v;c.classList.remove('ok','wrong','missed');
+      if(marked.has(v)&&set.has(v))c.classList.add('ok');else if(marked.has(v)){c.classList.add('wrong');w++;}else if(set.has(v)){c.classList.add('missed');ms++;}});
+    if(!w&&!ms){res.innerHTML='בום! כל הערכים נכונים: '+seq();res.className='bresult good';}
+    else{var p=[];if(w)p.push(w===1?'מספר אחד סומן בטעות':w+' מספרים סומנו בטעות');if(ms)p.push(ms===1?'ערך אחד חסר':ms+' ערכים חסרים');res.innerHTML='עוד לא: '+p.join(', ')+'.';res.className='bresult bad';}};
+  document.getElementById('boomShow').onclick=function(){grid.querySelectorAll('.cell').forEach(function(c){c.classList.remove('ok','wrong','missed','marked');if(set.has(+c.dataset.v))c.classList.add('ok');});
+    res.innerHTML='ערכי i: '+seq()+'. עוצרים כש־i = <span class="seq">'+STOP+'</span>, כי '+'<span class="seq">'+STOP+' &lt; 20</span> שקרי.';res.className='bresult good';};
+  document.getElementById('boomClear').onclick=function(){marked.clear();grid.querySelectorAll('.cell').forEach(function(c){c.classList.remove('marked','ok','wrong','missed');c.setAttribute('aria-pressed','false');});res.innerHTML='';res.className='bresult';};
+}
+})();
+
+// countdown simulation
+(function(){
+  var out=document.getElementById('simOut'); if(!out) return;
+  var lift=document.getElementById('simLift'), msg=document.getElementById('simMsg'), iv=document.getElementById('simI');
+  var rocket=document.getElementById('rocket'), sky=document.getElementById('sky');
+  var L=[null,document.getElementById('L1'),document.getElementById('L2'),document.getElementById('L3')];
+  var RLE='‫',PDF='‬', i, phase, timer=null;
+  function hl(n){L.forEach(function(x,k){if(x)x.classList.toggle('hl',k===n);});}
+  function say(html,cls){msg.innerHTML=html;msg.className='simmsg'+(cls?' '+cls:'');}
+  function seq(t){return '<span class="seq">'+t+'</span>';}
+  function reset(){stop();i=null;phase='init';out.textContent='';lift.textContent='';iv.textContent='?';hl(0);
+    rocket.classList.remove('go');sky.classList.remove('go');void rocket.offsetWidth;say(RLE+'לחצו „הרץ“ או „צעד“'+PDF);}
+  function step(){
+    if(phase==='init'){i=10;iv.textContent=i;hl(1);say('אתחול: '+seq('i = 10'));phase='check';}
+    else if(phase==='check'){hl(1);var ok=i>=1;say('בדיקת התנאי: '+seq(i+' >= 1')+(ok?' אמת':' שקר'),ok?'t':'f');phase=ok?'body':'after';}
+    else if(phase==='body'){hl(2);out.textContent+=i+' ';say('הדפסה: '+seq(String(i)));phase='update';}
+    else if(phase==='update'){hl(1);var o=i;i=i-1;iv.textContent=i;say('קידום: '+seq('i = '+o+' - 1')+' → '+seq(String(i)));phase='check';}
+    else if(phase==='after'){hl(3);lift.textContent='Liftoff!';say('הלולאה הסתיימה, ומודפסת השורה שאחריה.','t');
+      rocket.classList.add('go');sky.classList.add('go');phase='done';stop();}
+  }
+  function stop(){if(timer){clearInterval(timer);timer=null;}document.getElementById('simRun').textContent='הרץ ▶';}
+  document.getElementById('simStep').onclick=function(){stop();if(phase==='done')reset();step();};
+  document.getElementById('simReset').onclick=reset;
+  document.getElementById('simRun').onclick=function(){
+    if(timer){stop();return;}
+    if(phase==='done')reset();
+    this.textContent='עצור ❚❚';
+    step(); timer=setInterval(function(){step(); if(phase==='done')stop();},520);
+  };
+  reset();
+})();
+
+// rabbits
+(function(){
+  var out=document.getElementById('rabOut'); if(!out) return;
+  var code=document.getElementById('rabCode'), msg=document.getElementById('rabMsg'), timer=null;
+  var R1=document.getElementById('R1'), R2=document.getElementById('R2');
+  var RLE='‫',PDF='‬';
+  function stop(){if(timer){clearInterval(timer);timer=null;}document.getElementById('rabRun').textContent='הרץ ▶';}
+  function bars(off){for(var k=1;k<=9;k++){document.getElementById('bar'+k).style.height='0';var v=document.getElementById('bv'+k);v.textContent='';v.classList.remove('on');}}
+  function reset(){stop();out.innerHTML='';msg.innerHTML='';msg.className='simmsg';code.classList.remove('shown');R1.classList.remove('hl');R2.classList.remove('hl');bars();}
+  document.getElementById('rabShow').onclick=function(){code.classList.add('shown');};
+  document.getElementById('rabReset').onclick=reset;
+  document.getElementById('rabRun').onclick=function(){
+    if(timer){stop();return;}
+    code.classList.add('shown'); out.innerHTML=''; msg.innerHTML=''; bars();
+    var sl=document.querySelector('#ex3 .slots'); if(sl){sl.style.setProperty('--ih',((sl.clientHeight-34)/10)+'px');}
+    var i=4, w=0, MAXH=100; this.textContent='עצור ❚❚';
+    timer=setInterval(function(){
+      if(i<=100){
+        R1.classList.remove('hl');R2.classList.add('hl');
+        var d=document.createElement('p');d.className='rline';d.innerHTML='<b>'+i+'</b> ארנבים';out.appendChild(d);
+        w++; var bar=document.getElementById('bar'+w), bv=document.getElementById('bv'+w); if(bar){bar.style.height='calc((100% - 34px) * '+(i/MAXH)+')'; bv.textContent=i; bv.classList.add('on');}
+        i=i+Math.floor(i/2);
+      } else {
+        R2.classList.remove('hl');R1.classList.add('hl');
+        msg.innerHTML='<span class="seq">i = '+i+'</span>, והתנאי <span class="seq">'+i+' &lt;= 100</span> שקרי. הלולאה עוצרת אחרי 9 שבועות.'; msg.className='simmsg f';
+        stop();
+      }
+    },650);
+  };
+  reset();
+})();
+
+// clickable multiple-choice answers
+(function(){
+  function letter(o){return o.querySelector('.ol').textContent.replace(/[‪-‮]/g,'').trim();}
+  document.querySelectorAll('.opts[data-ans]').forEach(function(box){
+    var sec=box.closest('section'), opts=[].slice.call(box.querySelectorAll('.opt'));
+    function pick(o){var was=o.classList.contains('sel');opts.forEach(function(x){x.classList.remove('sel','right','miss');x.setAttribute('aria-pressed','false');});
+      if(!was){o.classList.add('sel');o.setAttribute('aria-pressed','true');}}
+    opts.forEach(function(o){
+      o.addEventListener('click',function(){pick(o);});
+      o.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();e.stopPropagation();pick(o);}});
+    });
+    sec.querySelector('.qshow').onclick=function(){var a=box.dataset.ans;
+      opts.forEach(function(o){var isA=letter(o)===a;o.classList.remove('right','miss');
+        if(isA)o.classList.add('right'); else if(o.classList.contains('sel'))o.classList.add('miss');});};
+    sec.querySelector('.qclear').onclick=function(){opts.forEach(function(x){x.classList.remove('sel','right','miss');x.setAttribute('aria-pressed','false');});};
+  });
+})();
+</script>
+</body>
+</html>

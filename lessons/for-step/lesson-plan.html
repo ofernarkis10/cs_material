@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מערך שיעור: קפיצות המונה בלולאת for</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1d2433; --muted:#5b6578; --line:#e3e6ec; --bg:#fbfaf7; --card:#ffffff;
+    --accent:#2f5d8a; --accent-soft:#e8f0f8; --warn:#a4462b; --warn-soft:#fbece6;
+    --ok:#2e6b4a; --ok-soft:#e7f3ec; --code-bg:#f4f5f8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Heebo",system-ui,sans-serif;font-size:17px;line-height:1.65}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 22px 80px}
+  header{border-bottom:3px solid var(--ink);padding-bottom:18px;margin-bottom:28px}
+  .kicker{font-size:14px;color:var(--muted)}
+  h1{font-size:34px;line-height:1.2;margin:6px 0 10px;font-weight:800}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14.5px;color:var(--muted)}
+  .meta b{color:var(--ink);font-weight:600}
+  nav{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin-bottom:30px;font-size:15px}
+  nav a{color:var(--accent);text-decoration:none;margin-left:14px;white-space:nowrap}
+  nav a:hover{text-decoration:underline}
+  h2{font-size:25px;margin:48px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+  h3{font-size:19px;margin:28px 0 8px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  h3 .tag{font-size:13px;font-weight:500;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2px 10px}
+  .lead{color:var(--muted);margin:0 0 14px}
+  .key{background:var(--accent-soft);border-right:5px solid var(--accent);padding:14px 18px;border-radius:6px;margin:18px 0}
+  .key b{color:var(--accent)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0}
+  pre,code{font-family:"JetBrains Mono",ui-monospace,monospace;direction:ltr;unicode-bidi:isolate}
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:6px;padding:10px 14px;margin:8px 0;font-size:14.5px;overflow-x:auto;text-align:left}
+  code{background:var(--code-bg);padding:1px 5px;border-radius:4px;font-size:.9em}
+  pre code{background:none;padding:0}
+  code.cb{display:inline-block;text-align:left;line-height:1.6;padding:4px 8px;margin-bottom:4px}
+  .seq{font-family:"JetBrains Mono",monospace;direction:ltr;unicode-bidi:isolate;background:var(--code-bg);padding:1px 7px;border-radius:4px}
+  table{border-collapse:collapse;margin:10px 0;font-size:15.5px;width:100%;background:var(--card)}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:right;vertical-align:top}
+  th{background:#f0f2f6;font-weight:600}
+  td.c,th.c{text-align:center}
+  .comp th{width:24%}
+  .teacher{background:var(--warn-soft);border-radius:6px;padding:10px 14px;margin-top:10px;font-size:15px}
+  .teacher b{color:var(--warn)}
+  .note{font-size:15px;color:var(--muted)}
+  ul{margin:6px 0;padding-right:22px}
+  li{margin:3px 0}
+  .mcq{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0;break-inside:avoid}
+  .mcq-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+  .mcq-id{font-weight:700}
+  .focus{font-size:12.5px;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:1px 8px}
+  .focus.ext{color:var(--warn);background:var(--warn-soft)}
+  ol.opts{list-style:none;padding:0;margin:8px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:6px}
+  ol.opts li{border:1px solid var(--line);border-radius:6px;padding:6px 10px;margin:0;background:#fcfcfd}
+  ol.opts li.right{border-color:var(--ok);background:var(--ok-soft)}
+  ol.opts li .l{font-weight:700;margin-left:6px}
+  .opts-wide{grid-template-columns:1fr !important}
+  .dist{font-size:15px;margin-top:6px}
+  .dist b{color:var(--ink)}
+  .crit{display:inline-block;background:var(--ink);color:#fff;border-radius:4px;padding:2px 10px;font-size:14px;font-weight:600}
+  .principles{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+  .principles .card{margin:0}
+  .principles .num{font-size:28px;font-weight:800;color:var(--accent);line-height:1}
+  .toggle{font-family:inherit;font-size:14px;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:5px 12px;cursor:pointer}
+  .toggle:hover{border-color:var(--accent);color:var(--accent)}
+  body.student .wrap .right{border-color:var(--line) !important;background:#fcfcfd !important}
+  body.student .dist,body.student .teacher-only{display:none}
+  a{color:var(--accent)}
+  footer{margin-top:60px;border-top:1px solid var(--line);padding-top:14px;font-size:14px;color:var(--muted)}
+  #stage{display:none;position:fixed;inset:0;background:#fff;z-index:50;flex-direction:column;padding:28px 40px}
+  #stage.on{display:flex}
+  #stage .bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  #stage .bar .count{font-size:18px;color:var(--muted);font-weight:600}
+  #stage .q{flex:1;overflow:auto;font-size:30px;line-height:1.5}
+  #stage .q .mcq{border:none;padding:0;margin:0}
+  #stage .q .mcq-id{font-size:34px}
+  #stage .q pre{font-size:30px;padding:18px 24px}
+  #stage .q ol.opts{grid-template-columns:1fr 1fr;gap:14px}
+  #stage .q ol.opts li{padding:14px 18px;font-size:30px}
+  #stage .q .focus,#stage .q .teacher{display:none}
+  #stage .q .dist{display:none;font-size:20px}
+  #stage:not(.reveal) .q .right{border-color:var(--line);background:#fcfcfd}
+  #stage.reveal .q .dist{display:block}
+  #stage button{font-size:17px;padding:8px 16px}
+  @media print{body{background:#fff;font-size:12.5pt} nav,.toggle{display:none} .card,.mcq{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<style>.hub-back{display:inline-block;margin:0 0 14px;font-family:"Heebo",Arial,sans-serif;font-size:15px;font-weight:600;color:#2F7D4F;text-decoration:none}.hub-back:hover{text-decoration:underline}@media print{.hub-back{display:none}}</style><a class="hub-back" href="index.html">→ חזרה לדף השיעור</a>
+<header>
+  <div class="kicker">מתודיקה של הוראת מדעי המחשב · עבודה 2 · זוג 1</div>
+  <h1>מערך שיעור: קפיצות המונה בלולאת for</h1>
+  <div class="meta">
+    <span><b>יחידה:</b> יסודות מדעי המחשב, פרק 4 (ביצוע חוזר)</span>
+    <span><b>כיתה:</b> י׳</span>
+    <span><b>שפה:</b> Java</span>
+    <span><b>משך:</b> 45 דקות</span>
+    <span><b>הצגה:</b> 1.12.2026</span>
+    <span><b>מגישים:</b> עופר וטארק</span>
+    <span><b>מצגת:</b> מצגת מלווה לשיעור, עם שקף לכל שלב ותרגיל</span>
+  </div>
+</header>
+
+
+<div class="card" style="margin-top:0"><b>מצגת מלווה:</b> השיעור מלווה במצגת "קפיצות המונה בלולאת for: מצגת לשיעור", שמוקרנת על הלוח. בכל שקף יש כותרת, ומתחתיה התרגיל של אותו שלב: הפתיח, שלוש דוגמאות ההקנייה, הנחיית התרגול, שאלות ההערכה, כרטיס היציאה ושיעורי הבית. התשובות מופיעות רק בהערות הדובר של כל שקף.</div>
+
+<div class="key">
+  <b>הרעיון המרכזי:</b> החלק השלישי בכותרת הלולאה הוא <b>הוראת השמה רגילה</b>. לכן אפשר לכתוב בו כל השמה שמשנה את המונה: <code>i = i + 3</code>, ‏<code>i = i - 1</code>, ‏<code>i = i * 2</code>. הלולאה נעצרת בערך הראשון של המונה שבו התנאי <b>שקרי</b>.
+  <div class="note" style="margin-top:8px">לפי התכנית, כל הקידומים כתובים בכתיב המלא. אין שימוש ב־<code>i++</code> או ב־<code>+=</code>.</div>
+</div>
+
+<!-- ================= רכיב 1 ================= -->
+<h2 id="c1">רכיב 1 · מקום השיעור ומטרתו</h2>
+<table class="comp">
+  <tr><th>נושא ומקום בתכנית</th><td>פרק 4, "ביצוע חוזר". לולאת for שבה המונה משתנה בצעד שונה מ־1: קפיצה בצעד k, ספירה לאחור, וכפל כהרחבה.</td></tr>
+  <tr><th>מה בא לפני</th><td>לולאת for בסיסית עם <code>i = i + 1</code>: המבנה של אתחול, תנאי וקידום, ומעקב בטבלה עם עמודה למונה ולתנאי.</td></tr>
+  <tr><th>מה בא אחרי</th><td>צבירה ומנייה בתוך לולאה, לולאת while (ביצוע חוזר בתנאי), ולולאות מקוננות.</td></tr>
+  <tr><th>ידע קודם נדרש</th><td>משתנים והשמה, אופרטורים להשוואה (<code>&lt; &lt;= &gt; &gt;=</code>), האופרטור <code>%</code>, הדפסה, ומעקב אחרי for רגיל בטבלה.</td></tr>
+  <tr><th>מטרת תוכן</th><td>
+    בתוך שיעור אחד, בהינתן שהתלמידים יודעים לעקוב אחרי for עם <code>i = i + 1</code>, <b>כל התלמידים</b> יענו נכון על <b>לפחות 3 מתוך 4</b> שאלות אמריקאיות. השאלות בודקות את הערך האחרון של המונה, את מספר הסיבובים ואת הפלט, בלולאות עם צעד שונה מ־1, כולל ספירה לאחור.
+    <div class="note" style="margin-top:6px"><b>דרישות פתיחה:</b> for עם <code>i = i + 1</code> · <b>קריטריון לעמידה:</b> כל התלמידים, 3 מתוך 4 · <b>זמן להשגה:</b> שיעור אחד</div>
+  </td></tr>
+  <tr><th>קשיים צפויים</th><td>
+    <table>
+      <tr><th>קושי</th><th>דוגמה</th><th>מה עושים</th></tr>
+      <tr><td>הגבול לא "נוחת"</td><td><code class="cb">i = 1;<br>i &lt;= 20;<br>i = i + 3</code> מסתיים ב־19</td><td>עוקבים בטבלה עד השורה שבה התנאי שקרי</td></tr>
+      <tr><td><code>&lt;</code> לעומת <code>&lt;=</code></td><td><code>i &lt; 30</code> בצעד 5: האם 30 מודפס?</td><td>חיזוי לפני הרצה, והשוואה בין שתי הגרסאות</td></tr>
+      <tr><td>ספירה לאחור עם תנאי בכיוון הלא נכון</td><td><code class="cb">i = 10;<br>i &lt;= 0;<br>i = i - 2</code> לא מתבצעת אף פעם</td><td>מזכירים שהתנאי נבדק <b>לפני</b> הסיבוב הראשון</td></tr>
+      <tr><td>צעד שמרחיק מהגבול</td><td><code class="cb">i = 0;<br>i &lt; 10;<br>i = i - 1</code></td><td>שואלים: "האם המונה מתקרב לגבול?"</td></tr>
+      <tr><td>השמה חסרה</td><td><code>i = 2</code> (אינסופית), ‏<code>i + 2</code> (שגיאת הידור)</td><td>מריצים מול הכיתה ומראים את התוצאה</td></tr>
+      <tr><td>קידום כפול</td><td><code>i = i + 2</code> גם בכותרת וגם בגוף</td><td>מעקב עם שתי שורות לכל סיבוב</td></tr>
+      <tr><td>הנחה שהצעד קבוע</td><td>ת7: הצעד הוא 2 או 5 לפי <code>i % 4</code></td><td>מוסיפים לטבלת המעקב עמודה ל־<code>i % 4</code> ועמודה ל"כמה מוסיפים"</td></tr>
+      <tr><td>כפל שמתחיל מ־0</td><td><code class="cb">i = 0;<br>...;<br>i = i * 2</code></td><td>שואלים: "מה זה 0 כפול 2?"</td></tr>
+    </table>
+  </td></tr>
+</table>
+
+<h3>עקרונות שבולטים בשיעור (מתוך 12)</h3>
+<div class="principles">
+  <div class="card"><div class="num">10</div><b>לקרוא קוד לפני כתיבה</b><br><span class="note">בכל דוגמה התלמידים מנבאים את הפלט לפני ההרצה. ההערכה בנויה כולה מקריאת קוד.</span></div>
+  <div class="card"><div class="num">9</div><b>להפוך למוחשי</b><br><span class="note">טבלת מעקב עם עמודה למונה ולתנאי, וציר מספרים שעליו מסמנים את הקפיצות.</span></div>
+  <div class="card"><div class="num">4</div><b>לאתגר תפיסות שגויות</b><br><span class="note">ההערכה, שבה כל מסיח מייצג טעות צפויה, ושאלות ההמשך בהקנייה ("מה יקרה אם נתחיל מ־0?").</span></div>
+</div>
+
+<!-- ================= מהלך ================= -->
+<h2 id="flow">מהלך השיעור · 45 דקות (41 + 4 דקות מרווח)</h2>
+<table>
+  <tr><th>שלב</th><th>מה קורה</th><th>סוג שאלה</th><th class="c">דקות</th></tr>
+  <tr><td><b>1 · פתיח</b></td><td>"הדפיסו את הזוגיים מ־0 עד 20". אחרי שהתלמידים כותבים פתרון עם <code>if</code>, שואלים: אפשר בחצי מהסיבובים?</td><td>פיתוח, ואחריו חיזוי</td><td class="c">6</td></tr>
+  <tr><td><b>2 · הקנייה</b></td><td>הקידום הוא השמה. מדגימים צעד 3 שלא "נוחת", ספירה לאחור, וכפל, ועוקבים בטבלה</td><td>הסבר וניתוח ביצוע</td><td class="c">10</td></tr>
+  <tr><td><b>3 · תרגול</b></td><td>בזוגות ובקושי עולה: חיזוי, השלמת כותרת, ומעקב אחרי קידום שתלוי בתנאי</td><td>ניתוח ביצוע, מניפולציה על קוד, מעקב</td><td class="c">14</td></tr>
+  <tr><td><b>4 · הערכה</b></td><td>4 שאלות אמריקאיות מוקרנות על הלוח, וכל הכיתה מצביעה בבת אחת באצבעות</td><td>ניתוח ביצוע</td><td class="c">7</td></tr>
+  <tr><td><b>5 · סיכום</b></td><td>כרטיס יציאה: "איך יודעים כמה פעמים לולאה תתבצע?"</td><td>הסבר במילים</td><td class="c">4</td></tr>
+  <tr><td><b>6 · שיעורי בית</b></td><td>חזקות של 2 עד 1000, ספירה לאחור בקפיצות של 5, והיפוך של לולאה נתונה</td><td>פיתוח</td><td class="c">—</td></tr>
+</table>
+
+<!-- ================= 1 פתיח ================= -->
+<h3 id="s1">שלב 1 · פתיח <span class="tag">6 דקות</span></h3>
+<div class="card">
+  <ol>
+    <li>על הלוח: "כתבו קטע תכנית שמדפיס את כל המספרים הזוגיים מ־0 עד 20". נותנים 2 דקות.</li>
+    <li>רוב התלמידים יכתבו לולאה רגילה עם <code>if (i % 2 == 0)</code>. מבקשים מתלמיד אחד לכתוב את הפתרון שלו על הלוח.</li>
+    <li>שואלים: <b>"כמה פעמים הלולאה מתבצעת? וכמה פעמים מודפס משהו?"</b> התשובה: 21 סיבובים, אבל רק 11 הדפסות.</li>
+    <li>שאלה מעוררת: <b>"אפשר לקבל בדיוק אותו פלט ב־11 סיבובים, בלי if?"</b> נותנים לתלמידים להציע לפני שנותנים תשובה.</li>
+  </ol>
+  <div class="teacher"><b>למורה:</b> כשתלמיד מציע <code>i = i + 2</code>, מבקשים ממנו להסביר <b>למה זה מותר</b>. מכאן עוברים לרעיון המרכזי.</div>
+</div>
+
+<!-- ================= 2 הקנייה ================= -->
+<h3 id="s2">שלב 2 · הקנייה <span class="tag">10 דקות</span></h3>
+<div class="card">
+  <p><b>המסר:</b> בכותרת <code>for (אתחול; תנאי; קידום)</code>, הקידום הוא הוראת השמה, כמו כל השמה שהתלמידים מכירים. אחרי כל סיבוב היא מתבצעת, ואז התנאי נבדק שוב.</p>
+  <p><b>דוגמה 1, צעד 3:</b> לפני המעקב שואלים "האם 20 יודפס?", ואז עוקבים בטבלה.</p>
+<pre><code>for (int i = 1; i &lt;= 20; i = i + 3)
+    System.out.print(i + " ");</code></pre>
+  <table style="max-width:420px">
+    <tr><th class="c">i</th><th class="c">i &lt;= 20</th><th class="c">פלט</th></tr>
+    <tr><td class="c">1</td><td class="c">אמת</td><td class="c">1</td></tr>
+    <tr><td class="c">4</td><td class="c">אמת</td><td class="c">4</td></tr>
+    <tr><td class="c">…</td><td class="c">…</td><td class="c">…</td></tr>
+    <tr><td class="c">19</td><td class="c">אמת</td><td class="c">19</td></tr>
+    <tr><td class="c">22</td><td class="c"><b>שקר</b></td><td class="c">הלולאה נעצרת</td></tr>
+  </table>
+  <p class="note">פלט: <span class="seq">1 4 7 10 13 16 19</span>, ‏7 סיבובים. מדגישים שהגבול שבתנאי הוא לא בהכרח הערך האחרון שמודפס.</p>
+
+  <p><b>דוגמה 2, ספירה לאחור:</b> שואלים "מה צריך לשנות כדי לספור לאחור?" התשובה: <b>את שלושת החלקים</b>.</p>
+<pre><code>for (int i = 10; i &gt;= 1; i = i - 1)
+    System.out.print(i + " ");
+System.out.println("שיגור!");</code></pre>
+
+  <p><b>דוגמה 3, השמה שאינה חיבור:</b> זו הדוגמה שמבססת את הרעיון שהקידום יכול להיות כל השמה.</p>
+<pre><code>for (int i = 1; i &lt;= 100; i = i * 2)
+    System.out.print(i + " ");</code></pre>
+  <p class="note">פלט: <span class="seq">1 2 4 8 16 32 64</span>. שאלת המשך: "מה יקרה אם נתחיל מ־0?" אפשר להשאיר אותה פתוחה, והתשובה תגיע בתרגול.</p>
+
+  <div class="teacher"><b>שלוש בדיקות לכל לולאה עם צעד (נשארות על הלוח):</b> (1) האם הצעד <b>מקרב</b> את המונה לגבול? (2) האם הקידום הוא <b>השמה</b> שמשתמשת ב־<code>i</code>? (3) מה הערך <b>הראשון</b> שבו התנאי שקרי?</div>
+</div>
+
+<!-- ================= 3 תרגול ================= -->
+<h3 id="s3">שלב 3 · תרגול <span class="tag">14 דקות · בזוגות</span></h3>
+<div class="card">
+  <p>דף התרגול לתלמידים (שאלות בלבד) נמצא בעמוד נפרד: "דף תרגול: קפיצות המונה בלולאת for". הפתרונות למורה מופיעים כאן למטה.</p>
+  <table>
+    <tr><th>רמה</th><th>תוכן</th><th>תרגילים</th></tr>
+    <tr><td>א</td><td>מה יודפס וכמה סיבובים?</td><td>ת1, ת2</td></tr>
+    <tr><td>ב</td><td>השלמת כותרת לסדרה נתונה</td><td>ת3–ת6</td></tr>
+    <tr><td>ג</td><td>מעקב אחרי קידום שתלוי בתנאי (<code>? :</code> בכותרת)</td><td>ת7</td></tr>
+  </table>
+  <details style="margin-top:10px"><summary style="cursor:pointer;font-weight:600;color:#2e6b4a">פתרונות לדף התרגול (למורה)</summary>
+  <table>
+    <tr><th>תרגיל</th><th>פתרון</th></tr>
+    <tr><td>ת1</td><td><span class="seq">5 10 15 20 25 30</span> · 6 סיבובים</td></tr>
+    <tr><td>ת2</td><td><span class="seq">3 9 27</span> · 3 סיבובים</td></tr>
+    <tr><td>ת3</td><td><code>for (int i = 7; i &lt;= 35; i = i + 7)</code></td></tr>
+    <tr><td>ת4</td><td><code>for (int i = 100; i &gt;= 10; i = i - 10)</code></td></tr>
+    <tr><td>ת5</td><td><code>for (int i = 3; i &lt;= 96; i = i * 2)</code> · ‏6 סיבובים (192 כבר לא מקיים את התנאי)</td></tr>
+    <tr><td>ת6</td><td><code>for (int i = 1000; i &gt;= 1; i = i / 10)</code> · ‏4 סיבובים (אחרי 1, המונה הופך ל־0, כי זה חילוק של שלמים). גם <code>i &gt; 0</code> נכון</td></tr>
+    <tr><td>ת7</td><td>
+      <table>
+        <tr><th>i</th><th>i &lt; 125</th><th>i % 4</th><th>מוסיפים</th><th>i אחרי הקידום</th></tr>
+        <tr><td>100</td><td>אמת</td><td>0</td><td>2</td><td>102</td></tr>
+        <tr><td>102</td><td>אמת</td><td>2</td><td>5</td><td>107</td></tr>
+        <tr><td>107</td><td>אמת</td><td>3</td><td>5</td><td>112</td></tr>
+        <tr><td>112</td><td>אמת</td><td>0</td><td>2</td><td>114</td></tr>
+        <tr><td>114</td><td>אמת</td><td>2</td><td>5</td><td>119</td></tr>
+        <tr><td>119</td><td>אמת</td><td>3</td><td>5</td><td>124</td></tr>
+        <tr><td>124</td><td>אמת</td><td>0</td><td>2</td><td>126</td></tr>
+        <tr><td>126</td><td><b>שקר</b></td><td>—</td><td>—</td><td>—</td></tr>
+      </table>
+      הפלט, כל ערך בשורה נפרדת: <span class="seq">100</span> <span class="seq">102</span> <span class="seq">107</span> <span class="seq">112</span> <span class="seq">114</span> <span class="seq">119</span> <span class="seq">124</span> (‏7 סיבובים).
+      <div class="note">כאן ההשמה המותנית כתובה בכותרת עצמה, בעזרת האופרטור <code>? :</code>. הצעד משתנה לפי <code>i % 4</code>: כשהשארית 0 מוסיפים 2, ואחרת מוסיפים 5. נוצר דפוס שחוזר על עצמו, +2, +5, +5, ושוב +2. הלולאה נעצרת ב־126, שעובר את הגבול 125 בלי "לנחות" עליו.</div>
+    </td></tr>
+  </table>
+  <p class="note">כל הפתרונות נבדקו בהרצה ב־Java.</p>
+  </details>
+  <div class="teacher"><b>למורה:</b> כדאי לעבור בין הזוגות, ולבקש מכל זוג שנתקע במזגן לעקוב בטבלה ולא לנחש.</div>
+</div>
+
+<!-- ================= 4 הערכה ================= -->
+<h3 id="s4">שלב 4 · הערכה <span class="tag">7 דקות · על הלוח, כל הכיתה</span></h3>
+<p class="lead">ארבע שאלות ליבה שבודקות בדיוק את מטרת השיעור: תנאי הסיום והספירה לאחור. <span class="crit">קריטריון לעמידה: 3 מתוך 4</span></p>
+<div class="card">
+  <b>איך זה עובד על הלוח</b>
+  <ol>
+    <li>מקרינים את השאלה מהמצגת המלווה. כל שאלה מופיעה בשקף משלה, עם הקוד וארבע התשובות, <b>בלי הפתרון</b>. הפתרון מופיע רק בהערות הדובר.</li>
+    <li>נותנים כחצי דקה לחשוב בשקט, <b>בלי לדבר</b>, וכל תלמיד מחליט לבד.</li>
+    <li>בספירה של "3, 2, 1", כל התלמידים מרימים יחד את מספר האצבעות של התשובה: אצבע אחת לא׳, שתיים לב׳, שלוש לג׳ וארבע לד׳.</li>
+    <li>המורה סורק את הכיתה ורושם בערך כמה תלמידים בחרו בכל תשובה.</li>
+    <li>רק אחרי ההצבעה חושפים את התשובה. מבקשים מתלמיד שבחר במסיח הנפוץ להסביר את הבחירה, ואז עוקבים יחד בטבלה.</li>
+  </ol>
+  <div class="teacher"><b>למה הצבעה בבת אחת:</b> ככה כל תלמיד עונה בעצמו, בלי להעתיק מהשכן או להתיישר לפי מי שענה ראשון. זה מאפשר לבדוק את הקריטריון "כל התלמידים, 3 מתוך 4" גם בעבודה מול כל הכיתה. מי שטעה ביותר משאלה אחת מקבל תשומת לב בתרגול הבא.</div>
+</div>
+<p class="note">כל מסיח מייצג טעות צפויה, וכך ההצבעה מראה במה בדיוק התלמידים טועים. שאלות ה5–ה7 הן הרחבה: אם נשאר זמן, או לפתיחת השיעור הבא. כל התשובות נבדקו בהרצה ב־Java.</p>
+<p><button type="button" class="toggle" id="present">▶ מצב הקרנה ללוח</button> <button type="button" class="toggle" id="toggleKey">הסתר תשובות (גרסת תלמיד)</button></p>
+
+<div class="mcq">
+  <div class="mcq-head"><span class="mcq-id">ה1 · מה הערך האחרון שיודפס?</span><span class="focus">גבול שלא "נוחת"</span></div>
+<pre><code>for (int i = 1; i &lt;= 20; i = i + 4)
+    System.out.print(i + " ");</code></pre>
+  <ol class="opts">
+    <li><span class="l">א.</span>20</li>
+    <li class="right"><span class="l">ב.</span>17</li>
+    <li><span class="l">ג.</span>21</li>
+    <li><span class="l">ד.</span>16</li>
+  </ol>
+  <div class="dist"><b>מה המסיחים חושפים:</b> <b>א:</b> התלמיד מניח שהגבול תמיד מודפס. <b>ג:</b> התלמיד מדפיס גם את הערך שבו התנאי נכשל. <b>ד:</b> התלמיד חישב כפולות של 4, כאילו הסדרה מתחילה מ־0. <span class="note">(הסדרה: ‎1 5 9 13 17‎)</span></div>
+</div>
+
+<div class="mcq">
+  <div class="mcq-head"><span class="mcq-id">ה2 · כמה פעמים תתבצע הלולאה?</span><span class="focus">&lt; לעומת &lt;=</span></div>
+<pre><code>for (int i = 0; i &lt; 30; i = i + 5)
+    System.out.print(i + " ");</code></pre>
+  <ol class="opts">
+    <li><span class="l">א.</span>5</li>
+    <li class="right"><span class="l">ב.</span>6</li>
+    <li><span class="l">ג.</span>7</li>
+    <li><span class="l">ד.</span>30</li>
+  </ol>
+  <div class="dist"><b>מה המסיחים חושפים:</b> <b>א:</b> התלמיד חישב 30 חלקי 5 ושכח את הסיבוב של 0. <b>ג:</b> התלמיד ספר גם את 30, כלומר בלבל בין <code>&lt;</code> ל־<code>&lt;=</code>. <b>ד:</b> התלמיד מניח שהגבול הוא מספר הסיבובים. <span class="note">(הסדרה: ‎0 5 10 15 20 25‎)</span></div>
+</div>
+
+<div class="mcq">
+  <div class="mcq-head"><span class="mcq-id">ה3 · מה יודפס?</span><span class="focus">ספירה לאחור עד 0</span></div>
+<pre><code>for (int i = 12; i &gt;= 0; i = i - 3)
+    System.out.print(i + " ");</code></pre>
+  <ol class="opts">
+    <li class="right"><span class="l">א.</span><span class="seq">12 9 6 3 0</span></li>
+    <li><span class="l">ב.</span><span class="seq">12 9 6 3</span></li>
+    <li><span class="l">ג.</span><span class="seq">9 6 3 0</span></li>
+    <li><span class="l">ד.</span><span class="seq">0 3 6 9 12</span></li>
+  </ol>
+  <div class="dist"><b>מה המסיחים חושפים:</b> <b>ב:</b> התלמיד חושב ש־0 לא מקיים את <code>&gt;= 0</code>. <b>ג:</b> התלמיד חושב שהקידום מתבצע לפני הסיבוב הראשון. <b>ד:</b> התלמיד מניח שלולאה תמיד רצה מהקטן לגדול.</div>
+</div>
+
+<div class="mcq">
+  <div class="mcq-head"><span class="mcq-id">ה4 · מה יקרה?</span><span class="focus">ספירה לאחור, תנאי בכיוון הלא נכון</span></div>
+<pre><code>for (int i = 10; i &lt;= 0; i = i - 2)
+    System.out.print(i + " ");</code></pre>
+  <ol class="opts">
+    <li><span class="l">א.</span>יודפס <span class="seq">10 8 6 4 2 0</span></li>
+    <li><span class="l">ב.</span>יודפס <span class="seq">10 8 6 4 2</span></li>
+    <li class="right"><span class="l">ג.</span>לא יודפס כלום</li>
+    <li><span class="l">ד.</span>הלולאה לא תיעצר</li>
+  </ol>
+  <div class="dist"><b>מה המסיחים חושפים:</b> <b>א, ב:</b> התלמיד קורא את הכוונה של המתכנת ולא את הקוד. <b>ד:</b> התלמיד לא מבין שהתנאי נבדק <b>לפני</b> הסיבוב הראשון. במקרה הזה <code>10 &lt;= 0</code> שקרי מיד.</div>
+</div>
+
+<h3 style="margin-top:34px">שאלות הרחבה</h3>
+
+<div class="mcq">
+  <div class="mcq-head"><span class="mcq-id">ה5 · מה יקרה?</span><span class="focus ext">צעד שמרחיק מהגבול</span></div>
+<pre><code>for (int i = 5; i &gt; 0; i = i + 1)
+    System.out.print(i + " ");</code></pre>
+  <ol class="opts">
+    <li><span class="l">א.</span>יודפס <span class="seq">5 4 3 2 1</span></li>
+    <li><span class="l">ב.</span>יודפס 5 בלבד</li>
+    <li><span class="l">ג.</span>לא יודפס כלום</li>
+    <li class="right"><span class="l">ד.</span>הלולאה (בפועל) לא תיעצר</li>
+  </ol>
+  <div class="dist"><b>מה המסיחים חושפים:</b> <b>א:</b> התלמיד מניח שהתנאי <code>&gt; 0</code> "מכריח" ספירה לאחור. <b>ב, ג:</b> התלמיד לא עוקב בפועל אחרי ערכי המונה.</div>
+  <div class="teacher teacher-only"><b>ידע תוכן למורה:</b> בהרצה ב־Java נמדדו 2,147,483,643 סיבובים. אחרי הסיבובים האלה המונה עובר את הערך הגדול ביותר ש־<code>int</code> יכול להחזיק, "גולש" לערך שלילי, והתנאי נכשל. לתלמידים מספיק להגיד "בפועל, לא נעצרת".</div>
+</div>
+
+<div class="mcq">
+  <div class="mcq-head"><span class="mcq-id">ה6 · איזו כותרת תדפיס בדיוק <span class="seq">20 15 10 5</span>?</span><span class="focus ext">בחירת כותרת לספירה לאחור</span></div>
+  <ol class="opts opts-wide">
+    <li class="right"><span class="l">א.</span><code>for (int i = 20; i &gt;= 5; i = i - 5)</code></li>
+    <li><span class="l">ב.</span><code>for (int i = 20; i &gt; 5; i = i - 5)</code></li>
+    <li><span class="l">ג.</span><code>for (int i = 20; i &lt;= 5; i = i - 5)</code></li>
+    <li><span class="l">ד.</span><code>for (int i = 5; i &lt;= 20; i = i + 5)</code></li>
+  </ol>
+  <div class="dist"><b>מה המסיחים חושפים:</b> <b>ב:</b> מדפיסה <span class="seq">20 15 10</span> ומפספסת את הערך האחרון. <b>ג:</b> תנאי בכיוון הלא נכון, ולכן לא יודפס כלום. <b>ד:</b> מדפיסה את אותם מספרים בסדר הפוך.</div>
+</div>
+
+<div class="mcq">
+  <div class="mcq-head"><span class="mcq-id">ה7 · אתגר: מה ערך המונה אחרי הלולאה?</span><span class="focus ext">מהות תנאי הסיום</span></div>
+<pre><code>int i;
+for (i = 10; i &gt; 0; i = i - 4) { }
+System.out.println(i);</code></pre>
+  <ol class="opts">
+    <li><span class="l">א.</span>2</li>
+    <li><span class="l">ב.</span>0</li>
+    <li class="right"><span class="l">ג.</span>‎-2‎</li>
+    <li><span class="l">ד.</span>4</li>
+  </ol>
+  <div class="dist"><b>מה המסיחים חושפים:</b> <b>א:</b> התלמיד מניח שהמונה נשאר על הערך האחרון שעבר את התנאי. <b>ב:</b> התלמיד מניח שהלולאה "נעצרת על הגבול". <b>ד:</b> התלמיד עשה טעות חישוב בסדרה. <span class="note">(ערכי המונה: ‎10 6 2 -2‎. הלולאה נעצרת בערך הראשון שבו התנאי שקרי. המונה מוגדר כאן מחוץ ללולאה, ולכן אפשר להדפיס אותו אחריה.)</span></div>
+</div>
+
+<div class="teacher"><b>שימוש בתוצאות:</b> סופרים בכל הצבעה כמה תלמידים בחרו בכל מסיח. אם רבים בחרו באותו מסיח, זו טעות שחוזרים אליה בפתיחת השיעור הבא. למשל, אם רבים בחרו ב־ה2 ג׳, חוזרים על <code>&lt;</code> לעומת <code>&lt;=</code>.</div>
+
+<!-- ================= 5 סיכום ================= -->
+<h3 id="s5">שלב 5 · סיכום <span class="tag">4 דקות</span></h3>
+<div class="card">
+  <p><b>כרטיס יציאה:</b> כל תלמיד משלים במשפט אחד: "כדי לדעת כמה פעמים לולאת for תתבצע, אני…"</p>
+  <p class="note"><b>תשובה לדוגמה:</b> "…עוקב אחרי ערכי המונה מהאתחול, משנה אותו בכל פעם לפי הקידום, ונעצר בפעם הראשונה שהתנאי שקרי. הסיבוב הזה כבר לא מתבצע."</p>
+  <p>חוזרים לשלוש הבדיקות שעל הלוח: <b>כיוון</b> (הצעד מקרב לגבול), <b>השמה</b> (<code>i = i + k</code>), ו<b>ערך אחרון</b> (הוא לא תמיד הגבול).</p>
+</div>
+
+<!-- ================= 6 שיעורי בית ================= -->
+<h3 id="s6">שלב 6 · שיעורי בית</h3>
+<div class="card">
+  <ul>
+    <li><b>ב1:</b> כתבו לולאה שמדפיסה את כל החזקות של 2 שאינן גדולות מ־1000.</li>
+    <li><b>ב2:</b> כתבו לולאה שמדפיסה <span class="seq">50 45 40 … 10 5</span>.</li>
+    <li><b>ב3:</b> כתבו לולאה שמדפיסה בסדר הפוך את המספרים שמדפיסה הלולאה <code>for (int i = 4; i &lt;= 40; i = i + 4)</code>.</li>
+  </ul>
+  <p class="note"><b>פתרונות:</b> ב1: <code>for (int i = 1; i &lt;= 1000; i = i * 2)</code>, והפלט הוא <span class="seq">1 2 4 … 512</span> (10 סיבובים). ב2: <code>for (int i = 50; i &gt;= 5; i = i - 5)</code>. ב3: <code>for (int i = 40; i &gt;= 4; i = i - 4)</code>.</p>
+</div>
+
+<!-- ================= הצגה ================= -->
+<h2 id="pres">ההצגה בקורס · 15 + 30 דקות</h2>
+<table>
+  <tr><th>חלק</th><th>מה מציגים</th><th class="c">דקות</th></tr>
+  <tr><td rowspan="2"><b>הקנייה</b><br><span class="note">מלמדים את הכיתה כמו בשיעור אמיתי</span></td><td>פתיח בקיצור: הזוגיים עד 20, שאלת "כמה סיבובים?", ושאלת "בחצי מהסיבובים?"</td><td class="c">5</td></tr>
+  <tr><td>הקנייה: הרעיון המרכזי, ואחריו דוגמה 1 (צעד 3 עם טבלת מעקב) ודוגמה 3 (כפל). את דוגמה 2 (ספירה לאחור) מדלגים, כי ת4 בתרגול (ספירה לאחור מ־100 בקפיצות של 10) מכסה אותה.</td><td class="c">10</td></tr>
+  <tr><td rowspan="3"><b>תרגול</b><br><span class="note">מציגים את התרגילים שהתלמידים יקבלו</span></td><td>מעבר על רמות א–ג בדף התרגול, עם דגש על ת7, שבה הצעד משתנה לפי תנאי. ההסבר הוא איך השאלה מרחיבה את הרעיון שהקידום הוא כל השמה.</td><td class="c">15</td></tr>
+  <tr><td>ההערכה על הלוח: מקרינים את ה1–ה4, והסטודנטים מצביעים באצבעות כמו תלמידים. אחר כך מראים מה כל מסיח חושף.</td><td class="c">10</td></tr>
+  <tr><td>סיכום ושיעורי בית, ושאלות</td><td class="c">5</td></tr>
+</table>
+
+<footer>
+  עבודה 2 · מתודיקה של הוראת מדעי המחשב · עופר וטארק · כל הפלטים בקוד נבדקו בהרצה ב־Java.
+</footer>
+
+</div>
+<div id="stage" role="dialog" aria-label="מצב הקרנה">
+  <div class="bar">
+    <span class="count" id="stCount"></span>
+    <span>
+      <button type="button" class="toggle" id="stPrev">→ הקודמת</button>
+      <button type="button" class="toggle" id="stReveal">הצג תשובה</button>
+      <button type="button" class="toggle" id="stNext">הבאה ←</button>
+      <button type="button" class="toggle" id="stClose">יציאה ✕</button>
+    </span>
+  </div>
+  <div class="q" id="stQ"></div>
+</div>
+<script>
+  (function(){
+    var qs=[].slice.call(document.querySelectorAll('.mcq')), idx=0;
+    var st=document.getElementById('stage'), box=document.getElementById('stQ');
+    function show(){
+      st.classList.remove('reveal');
+      box.innerHTML=qs[idx].outerHTML;
+      document.getElementById('stCount').textContent='שאלה '+(idx+1)+' מתוך '+qs.length+(idx>=4?' · הרחבה':'');
+      document.getElementById('stReveal').textContent='הצג תשובה';
+    }
+    document.getElementById('present').addEventListener('click',function(){idx=0;show();st.classList.add('on');});
+    document.getElementById('stClose').addEventListener('click',function(){st.classList.remove('on');});
+    document.getElementById('stNext').addEventListener('click',function(){if(idx<qs.length-1){idx++;show();}});
+    document.getElementById('stPrev').addEventListener('click',function(){if(idx>0){idx--;show();}});
+    document.getElementById('stReveal').addEventListener('click',function(){
+      var on=st.classList.toggle('reveal');
+      this.textContent=on?'הסתר תשובה':'הצג תשובה';
+    });
+    document.addEventListener('keydown',function(e){
+      if(!st.classList.contains('on'))return;
+      if(e.key==='ArrowLeft')document.getElementById('stNext').click();
+      else if(e.key==='ArrowRight')document.getElementById('stPrev').click();
+      else if(e.key===' '){e.preventDefault();document.getElementById('stReveal').click();}
+      else if(e.key==='Escape')st.classList.remove('on');
+    });
+  })();
+  (function(){
+    var b=document.getElementById('toggleKey');
+    b.addEventListener('click',function(){
+      var on=document.body.classList.toggle('student');
+      b.textContent = on ? 'הצג תשובות (גרסת מורה)' : 'הסתר תשובות (גרסת תלמיד)';
+    });
+  })();
+</script>
+</body>
+</html>
