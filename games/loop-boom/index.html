@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>בום של לולאה: לוח אינטראקטיבי</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&family=Rubik:wght@600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--dark:#143B2E;--light:#F3F6EF;--accent:#2F7D4F;--accent2:#9BD77A;--card:#FBFDF8;--line:#D7E2D1;--soft:#E2EBDD;--muted:#4A5A52;--bad:#B23A2E;--bad-soft:#FBE7E4}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--light);color:var(--dark);font-family:"Heebo",Arial,sans-serif;display:flex;flex-direction:column}
+  .wrap{flex:1;display:flex;flex-direction:column;gap:2.2vh;padding:4vh 4vw;max-width:1600px;width:100%;margin:0 auto}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:1em}
+  .home{font-family:"Heebo",sans-serif;font-weight:600;color:var(--accent);text-decoration:none;font-size:clamp(14px,1.3vw,20px)}
+  .home:hover{text-decoration:underline}
+  .eyebrow{font-family:"Rubik",sans-serif;font-weight:600;color:var(--accent);font-size:clamp(16px,1.6vw,26px)}
+  h1{font-family:"Rubik",sans-serif;font-weight:800;margin:0;font-size:clamp(26px,3.4vw,58px);line-height:1.1}
+  .code{direction:ltr;align-self:flex-start;background:var(--soft);border-radius:14px;padding:1.4vh 2vw;font-family:"JetBrains Mono",monospace;font-size:clamp(18px,2.4vw,42px);display:flex;flex-wrap:wrap;align-items:center;gap:.3em}
+  .code input,.code select{font:inherit;color:var(--dark);background:#fff;border:2px solid var(--line);border-radius:8px;padding:0 .2em;text-align:center}
+  .code input.n{width:2.6em}
+  .code select{appearance:none;-webkit-appearance:none;padding:0 .3em;cursor:pointer}
+  .code input:focus,.code select:focus{outline:3px solid var(--accent2);border-color:var(--accent)}
+  .hint{color:var(--muted);font-size:clamp(14px,1.3vw,22px)}
+  .board{display:grid;grid-template-columns:repeat(var(--cols,10),1fr);gap:1.2vw;direction:ltr}
+  .cell{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:clamp(20px,3vw,54px);background:var(--card);color:var(--dark);border:3px solid var(--line);border-radius:14px;padding:1.6vh 0;cursor:pointer;user-select:none;transition:background-color .2s,color .2s,border-color .2s,transform .1s}
+  .cell:hover{border-color:var(--accent)}
+  .cell:active{transform:scale(.96)}
+  .cell.marked{background:var(--accent);color:var(--light);border-color:var(--accent)}
+  .cell.ok{background:var(--accent);color:var(--light);border-color:var(--accent)}
+  .cell.wrong{background:var(--bad-soft);color:var(--bad);border-color:var(--bad);text-decoration:line-through}
+  .cell.missed{background:var(--card);color:var(--accent);border:3px dashed var(--accent)}
+  .bar{display:flex;flex-wrap:wrap;gap:1vw;align-items:center}
+  button.btn{font-family:"Heebo",sans-serif;font-weight:800;font-size:clamp(16px,1.6vw,28px);border-radius:12px;padding:1vh 1.8vw;cursor:pointer;border:2px solid var(--dark);background:var(--dark);color:var(--light)}
+  button.btn.ghost{background:transparent;color:var(--dark)}
+  button.btn:hover{filter:brightness(1.15)}
+  .result{font-size:clamp(16px,1.7vw,30px);font-weight:600;min-height:1.4em}
+  .result .seq{direction:ltr;unicode-bidi:isolate;font-family:"JetBrains Mono",monospace;background:var(--soft);padding:0 .4em;border-radius:6px}
+  .result.good{color:var(--accent)}
+  .result.bad{color:var(--bad)}
+  .legend{display:flex;gap:1.5vw;flex-wrap:wrap;color:var(--muted);font-size:clamp(13px,1.2vw,20px)}
+  .legend span::before{content:"";display:inline-block;width:.9em;height:.9em;border-radius:3px;margin-left:.35em;vertical-align:-.1em}
+  .lg-ok::before{background:var(--accent)}
+  .lg-wrong::before{background:var(--bad-soft);border:2px solid var(--bad)}
+  .lg-miss::before{border:2px dashed var(--accent)}
+  .range{display:flex;gap:.6em;align-items:center;color:var(--muted);font-size:clamp(13px,1.2vw,20px)}
+  .range input{width:4em;font:inherit;text-align:center;border:2px solid var(--line);border-radius:8px;padding:.1em}
+  .spacer{flex:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="eyebrow">חימום · בום של לולאה</div>
+    <a class="home" href="../../index.html">→ חזרה לדף הראשי</a>
+  </div>
+  <h1>סמנו את כל הערכים ש־<span style="font-family:'JetBrains Mono',monospace">i</span> מקבל</h1>
+
+  <div class="code" id="code" aria-label="כותרת הלולאה">
+    <span>for (int i =</span>
+    <input class="n" id="start" type="number" value="1" aria-label="ערך התחלה">
+    <span>; i</span>
+    <select id="op" aria-label="תנאי"><option>&lt;</option><option>&lt;=</option><option>&gt;</option><option>&gt;=</option></select>
+    <input class="n" id="bound" type="number" value="20" aria-label="גבול">
+    <span>; i = i</span>
+    <select id="sop" aria-label="פעולה"><option>+</option><option>-</option><option>*</option></select>
+    <input class="n" id="step" type="number" value="4" aria-label="צעד">
+    <span>)</span>
+  </div>
+  <div class="hint">לחצו על מספר כדי לסמן אותו, ולחיצה נוספת מבטלת את הסימון. אפשר לשנות את הערכים בכותרת כדי לשחק בלולאה אחרת.</div>
+
+  <div class="board" id="board"></div>
+
+  <div class="bar">
+    <button class="btn" id="check" type="button">בדיקה</button>
+    <button class="btn ghost" id="show" type="button">הצג תשובה</button>
+    <button class="btn ghost" id="clear" type="button">נקה</button>
+    <div class="spacer"></div>
+    <label class="range">מספרים על הלוח: מ־<input id="from" type="number" value="1"> עד <input id="to" type="number" value="20"></label>
+  </div>
+  <div class="result" id="result" aria-live="polite"></div>
+  <div class="legend"><span class="lg-ok">ערך נכון</span><span class="lg-wrong">סומן, אבל אינו ערך של i</span><span class="lg-miss">ערך של i שלא סומן</span></div>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var board=$('board'), result=$('result');
+  var marked=new Set();
+
+  function params(){
+    return {start:parseInt($('start').value,10), op:$('op').value, bound:parseInt($('bound').value,10),
+            sop:$('sop').value, step:parseInt($('step').value,10),
+            from:parseInt($('from').value,10), to:parseInt($('to').value,10)};
+  }
+  function cond(i,p){
+    switch(p.op){case '<':return i<p.bound;case '<=':return i<=p.bound;case '>':return i>p.bound;default:return i>=p.bound;}
+  }
+  function next(i,p){
+    return p.sop==='+'?i+p.step:p.sop==='-'?i-p.step:i*p.step;
+  }
+  // run the loop; returns values, the value that stopped it, and whether it was cut off
+  function run(){
+    var p=params(), vals=[], i=p.start, n=0;
+    if([p.start,p.bound,p.step].some(isNaN)) return {vals:[],stop:null,cut:false,bad:true};
+    while(cond(i,p)){ vals.push(i); i=next(i,p); if(++n>200) return {vals:vals,stop:null,cut:true}; }
+    return {vals:vals,stop:i,cut:false};
+  }
+  function build(){
+    var p=params(), from=isNaN(p.from)?1:p.from, to=isNaN(p.to)?20:p.to;
+    if(to<from){var t=from;from=to;to=t;}
+    if(to-from>99) to=from+99;
+    var count=to-from+1;
+    board.style.setProperty('--cols', count<=20?Math.min(10,count):10);
+    board.innerHTML='';
+    for(var k=from;k<=to;k++){
+      var b=document.createElement('button');
+      b.type='button'; b.className='cell'+(marked.has(k)?' marked':''); b.textContent=k; b.dataset.v=k;
+      b.setAttribute('aria-pressed',marked.has(k)?'true':'false');
+      board.appendChild(b);
+    }
+    result.textContent=''; result.className='result';
+  }
+  function clearState(){
+    board.querySelectorAll('.cell').forEach(function(c){c.classList.remove('ok','wrong','missed');});
+    result.textContent=''; result.className='result';
+  }
+  board.addEventListener('click',function(e){
+    var c=e.target.closest('.cell'); if(!c) return;
+    var v=+c.dataset.v;
+    clearState();
+    if(marked.has(v)){marked.delete(v);c.classList.remove('marked');c.setAttribute('aria-pressed','false');}
+    else{marked.add(v);c.classList.add('marked');c.setAttribute('aria-pressed','true');}
+  });
+  function seqHtml(arr){return '<span class="seq">'+arr.join(' ')+'</span>';}
+  function check(reveal){
+    var r=run();
+    if(r.bad){result.textContent='חסר ערך בכותרת הלולאה.';result.className='result bad';return;}
+    var set=new Set(r.vals), wrong=0, missed=0, ok=0;
+    board.querySelectorAll('.cell').forEach(function(c){
+      var v=+c.dataset.v; c.classList.remove('ok','wrong','missed','marked');
+      var isM=marked.has(v);
+      if(reveal){ if(set.has(v)) c.classList.add('ok'); return; }
+      if(isM&&set.has(v)){c.classList.add('ok');ok++;}
+      else if(isM){c.classList.add('wrong');wrong++;}
+      else if(set.has(v)){c.classList.add('missed');missed++;}
+    });
+    var stopTxt = r.cut ? 'הלולאה לא נעצרת (עצרנו אחרי 200 סיבובים).'
+                : (r.vals.length===0 ? 'הלולאה לא מתבצעת אף פעם: התנאי שקרי כבר בבדיקה הראשונה.'
+                : 'הלולאה נעצרת כש־i מקבל '+'<span class="seq">'+r.stop+'</span>'+', כי התנאי שקרי.');
+    var out=r.vals.length?('ערכי i: '+seqHtml(r.vals)+' · '+r.vals.length+' סיבובים. '):'';
+    if(reveal){ result.innerHTML=out+stopTxt; result.className='result good'; return; }
+    if(wrong===0&&missed===0){ result.innerHTML='בום! כל הערכים נכונים. '+out+stopTxt; result.className='result good'; }
+    else{
+      var parts=[]; if(wrong) parts.push(wrong===1?'מספר אחד סומן בטעות':wrong+' מספרים סומנו בטעות'); if(missed) parts.push(missed===1?'ערך אחד חסר':missed+' ערכים חסרים');
+      result.innerHTML='עוד לא. '+parts.join(', ')+'. נסו לעקוב: מאיפה מתחילים, בכמה קופצים, ומתי התנאי נעשה שקרי?';
+      result.className='result bad';
+    }
+  }
+  $('check').addEventListener('click',function(){check(false);});
+  $('show').addEventListener('click',function(){check(true);});
+  $('clear').addEventListener('click',function(){marked.clear();build();});
+  ['start','op','bound','sop','step'].forEach(function(id){$(id).addEventListener('input',clearState);});
+  ['from','to'].forEach(function(id){$(id).addEventListener('change',build);});
+  build();
+})();
+</script>
+</body>
+</html>
